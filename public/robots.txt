@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Block AI scraper bots that don't respect bandwidth (optional — remove if you want them)
+User-agent: GPTBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://masterpdftools.lovable.app/sitemap.xml
