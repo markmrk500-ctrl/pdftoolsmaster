@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PDFMaster Tools — iLovePDF-inspired design system. All colors HSL. */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Brand red — iLovePDF inspired */
+    --primary: 2 78% 53%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 2 78% 47%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 2 78% 96%;
+    --accent-foreground: 2 78% 35%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 2 78% 53%;
+
+    --radius: 0.75rem;
+
+    /* Tool brand colors */
+    --tool-merge: 217 91% 60%;
+    --tool-split: 142 71% 45%;
+    --tool-compress: 38 92% 50%;
+    --tool-convert: 271 81% 56%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(2 78% 98%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(2 78% 53%) 0%, hsl(12 78% 53%) 100%);
+
+    /* Shadows */
+    --shadow-card: 0 1px 3px 0 hsl(222 47% 11% / 0.05), 0 1px 2px 0 hsl(222 47% 11% / 0.03);
+    --shadow-card-hover: 0 10px 25px -5px hsl(222 47% 11% / 0.1), 0 8px 10px -6px hsl(222 47% 11% / 0.05);
+    --shadow-elegant: 0 20px 50px -12px hsl(2 78% 53% / 0.25);
+
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 2 78% 58%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 2 78% 65%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 2 78% 15%;
+    --accent-foreground: 2 78% 75%;
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 2 78% 58%;
+    --gradient-hero: linear-gradient(180deg, hsl(222 47% 6%) 0%, hsl(222 47% 9%) 100%);
+    --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
+    --shadow-card-hover: 0 10px 25px -5px hsl(0 0% 0% / 0.5);
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  h1, h2, h3, h4 { @apply tracking-tight; }
+}
+
+@layer components {
+  .tool-card {
+    @apply bg-card rounded-2xl p-6 border border-border;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+  }
+  .tool-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+  .ad-slot {
+    @apply bg-muted/40 border border-dashed border-border rounded-lg flex items-center justify-center text-xs text-muted-foreground;
+    min-height: 90px;
+  }
+}
