@@ -44,6 +44,7 @@ import InvertColors from "./pages/InvertColors.tsx";
 import AiSummarizePdf from "./pages/AiSummarizePdf.tsx";
 import AiTranslatePdf from "./pages/AiTranslatePdf.tsx";
 import AiOcrPdf from "./pages/AiOcrPdf.tsx";
+import AiMcqGenerator from "./pages/AiMcqGenerator.tsx";
 import About from "./pages/About.tsx";
 import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
@@ -100,6 +101,7 @@ const App = () => (
             <Route path="/ai-summarize-pdf" element={<AiSummarizePdf />} />
             <Route path="/ai-translate-pdf" element={<AiTranslatePdf />} />
             <Route path="/ai-ocr-pdf" element={<AiOcrPdf />} />
+            <Route path="/ai-mcq-generator" element={<AiMcqGenerator />} />
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />

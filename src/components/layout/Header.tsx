@@ -23,6 +23,7 @@ const categoryGroups: { name: string; tools: { to: string; label: string }[] }[]
       { to: "/ai-summarize-pdf", label: "AI Summarize PDF" },
       { to: "/ai-translate-pdf", label: "AI Translate PDF" },
       { to: "/ai-ocr-pdf", label: "AI OCR (Scanned PDF)" },
+      { to: "/ai-mcq-generator", label: "AI MCQ Generator" },
     ],
   },
   {
