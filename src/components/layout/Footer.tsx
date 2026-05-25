@@ -29,6 +29,16 @@ export const Footer = () => {
           </div>
 
           <div>
+            <h3 className="font-semibold text-sm mb-3">AI Tools ✨</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link to="/ai-chat-pdf" className="hover:text-primary">Chat with PDF</Link></li>
+              <li><Link to="/ai-mcq-generator" className="hover:text-primary">AI MCQ Generator</Link></li>
+              <li><Link to="/ai-summarize-pdf" className="hover:text-primary">AI Summarize PDF</Link></li>
+              <li><Link to="/ai-ocr-pdf" className="hover:text-primary">AI OCR</Link></li>
+            </ul>
+          </div>
+
+          <div>
             <h3 className="font-semibold text-sm mb-3">Company</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link to="/about" className="hover:text-primary">About</Link></li>

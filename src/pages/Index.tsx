@@ -51,6 +51,8 @@ import {
   Sparkles,
   Languages,
   ScanText,
+  MessageSquare,
+  ListChecks,
 } from "lucide-react";
 
 type Tool = { to: string; icon: any; title: string; description: string; color: string };
@@ -59,11 +61,13 @@ const categories: { id: string; name: string; description: string; tools: (Tool 
   {
     id: "ai",
     name: "AI Tools ✨",
-    description: "Smart AI-powered features: summarize, translate, and OCR scanned PDFs.",
+    description: "Smart AI-powered features: chat with PDFs, generate quizzes, summarize, translate, and OCR scanned PDFs.",
     tools: [
-      { to: "/ai-summarize-pdf", icon: Sparkles, title: "AI PDF Summarizer", description: "Get a TL;DR, key points & section summaries instantly.", color: "tool-merge", isNew: true },
-      { to: "/ai-translate-pdf", icon: Languages, title: "AI PDF Translator", description: "Translate any PDF into 20+ languages with AI.", color: "tool-convert", isNew: true },
-      { to: "/ai-ocr-pdf", icon: ScanText, title: "AI OCR (Scanned PDF)", description: "Extract text from scans & handwriting using AI vision.", color: "tool-split", isNew: true },
+      { to: "/ai-chat-pdf", icon: MessageSquare, title: "Chat with PDF", description: "Ask any PDF questions and get instant answers with page citations.", color: "tool-merge", isNew: true },
+      { to: "/ai-mcq-generator", icon: ListChecks, title: "AI MCQ Generator", description: "Turn any PDF, DOCX or text into a randomized quiz with explanations.", color: "tool-convert", isNew: true },
+      { to: "/ai-summarize-pdf", icon: Sparkles, title: "AI PDF Summarizer", description: "Get a TL;DR, key points & section summaries instantly.", color: "tool-split", isNew: true },
+      { to: "/ai-translate-pdf", icon: Languages, title: "AI PDF Translator", description: "Translate any PDF into 20+ languages with AI.", color: "tool-compress", isNew: true },
+      { to: "/ai-ocr-pdf", icon: ScanText, title: "AI OCR (Scanned PDF)", description: "Extract text from scans & handwriting using AI vision.", color: "tool-merge", isNew: true },
     ],
   },
   {
