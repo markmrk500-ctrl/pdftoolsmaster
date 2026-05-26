@@ -34,7 +34,8 @@ export const Footer = () => {
               <li><Link to="/ai-chat-pdf" className="hover:text-primary">Chat with PDF</Link></li>
               <li><Link to="/ai-mcq-generator" className="hover:text-primary">AI MCQ Generator</Link></li>
               <li><Link to="/ai-summarize-pdf" className="hover:text-primary">AI Summarize PDF</Link></li>
-              <li><Link to="/ai-ocr-pdf" className="hover:text-primary">AI OCR</Link></li>
+              <li><Link to="/ai-translate-pdf" className="hover:text-primary">AI Translate PDF</Link></li>
+              <li><Link to="/ai-ocr-pdf" className="hover:text-primary">AI OCR (Scanned PDF)</Link></li>
             </ul>
           </div>
 

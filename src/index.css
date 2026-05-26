@@ -88,11 +88,16 @@
 
 @layer base {
   * { @apply border-border; }
+  html { scroll-behavior: smooth; }
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
   }
   h1, h2, h3, h4 { @apply tracking-tight; }
+  /* Always reserve scrollbar space to prevent layout shift (CLS) for AdSense */
+  html { scrollbar-gutter: stable; }
+  img, video { max-width: 100%; height: auto; }
 }
 
 @layer components {
@@ -105,8 +110,23 @@
     box-shadow: var(--shadow-card-hover);
     transform: translateY(-2px);
   }
+  /* Reserve a fixed slot to keep CLS at 0 once real AdSense markup loads */
   .ad-slot {
     @apply bg-muted/40 border border-dashed border-border rounded-lg flex items-center justify-center text-xs text-muted-foreground;
     min-height: 90px;
+    contain: layout paint;
   }
+  /* Horizontal toolbar (category / tool quick-pick) */
+  .toolbar-scroll {
+    @apply flex items-center gap-2 overflow-x-auto overflow-y-hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+  .toolbar-scroll::-webkit-scrollbar { height: 6px; }
+  .toolbar-scroll::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 9999px;
+  }
+  .toolbar-scroll > * { scroll-snap-align: start; flex: 0 0 auto; }
 }
