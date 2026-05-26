@@ -34,9 +34,28 @@ interface McqQuestion {
 
 type Provider = "openai" | "gemini";
 
+const SUBJECTS = [
+  "Biology",
+  "Chemistry",
+  "Physics",
+  "Mathematics",
+  "Computer Science",
+  "English",
+  "Business",
+  "Medical",
+  "Engineering",
+  "Law",
+  "History",
+  "Economics",
+  "Accounting",
+] as const;
+
+const CUSTOM = "__custom__";
+
 const faqs = [
   { question: "Which file types are supported?", answer: "PDF, DOCX, and TXT files up to 50MB. You can also paste raw text directly." },
-  { question: "How are the questions generated?", answer: "Your selected content is sent to Lovable AI (OpenAI GPT-5 or Google Gemini). The model writes 4-option MCQs with one correct answer and a short explanation." },
+  { question: "Why do I need to pick a subject?", answer: "The subject tunes the AI to use the right terminology, notation, and difficulty for your field — so MCQs from a Biology PDF feel like real Biology questions, not generic ones." },
+  { question: "How are the questions generated?", answer: "Your selected content plus your chosen subject are sent to Lovable AI (OpenAI GPT-5 or Google Gemini). The model writes 4-option MCQs with one correct answer and an explanation." },
   { question: "Can I limit which pages are used?", answer: "Yes. For PDFs you can specify a page range (e.g. 3-12). Only that portion of the document is sent to the AI." },
   { question: "How many questions can I generate?", answer: "Between 5 and 50 questions per quiz. Larger quizzes take a few extra seconds." },
 ];
@@ -72,6 +91,8 @@ const AiMcqGenerator = () => {
   const [toPage, setToPage] = useState<number | "">("");
   const [count, setCount] = useState(10);
   const [provider, setProvider] = useState<Provider>("gemini");
+  const [subjectChoice, setSubjectChoice] = useState<string>("Biology");
+  const [customSubject, setCustomSubject] = useState("");
 
   const [progress, setProgress] = useState(0);
   const [processing, setProcessing] = useState(false);
@@ -142,9 +163,15 @@ const AiMcqGenerator = () => {
         throw new Error("Not enough text found. Please use a longer source or different page range.");
       }
 
+      const subject =
+        subjectChoice === CUSTOM ? customSubject.trim() : subjectChoice;
+      if (!subject) {
+        throw new Error("Please choose a subject (or enter a custom one).");
+      }
+
       setProgress(70);
       const { data, error: fnError } = await supabase.functions.invoke("ai-mcq", {
-        body: { text, count, provider },
+        body: { text, count, provider, subject },
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
@@ -178,8 +205,11 @@ const AiMcqGenerator = () => {
   };
 
   const allAnswered = answers.length > 0 && answers.every((a) => a !== null);
+  const subjectReady =
+    subjectChoice !== CUSTOM || customSubject.trim().length >= 2;
   const canGenerate =
     !processing &&
+    subjectReady &&
     ((mode === "paste" && pastedText.trim().length >= 100) || (mode === "file" && !!file));
 
   return (
@@ -253,6 +283,35 @@ const AiMcqGenerator = () => {
                   <p className="text-xs text-muted-foreground mt-2">{pastedText.length} characters</p>
                 </TabsContent>
               </Tabs>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="subject">Subject / Category</Label>
+                <Select value={subjectChoice} onValueChange={setSubjectChoice}>
+                  <SelectTrigger id="subject">
+                    <SelectValue placeholder="Choose a subject" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SUBJECTS.map((s) => (
+                      <SelectItem key={s} value={s}>{s}</SelectItem>
+                    ))}
+                    <SelectItem value={CUSTOM}>Custom subject…</SelectItem>
+                  </SelectContent>
+                </Select>
+                {subjectChoice === CUSTOM && (
+                  <Input
+                    autoFocus
+                    placeholder="e.g. Constitutional Law, Organic Chemistry, Machine Learning"
+                    value={customSubject}
+                    onChange={(e) => setCustomSubject(e.target.value)}
+                    maxLength={80}
+                    className="mt-2"
+                  />
+                )}
+                <p className="text-xs text-muted-foreground">
+                  The AI tailors terminology, notation, and difficulty to this subject.
+                </p>
+              </div>
+
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
