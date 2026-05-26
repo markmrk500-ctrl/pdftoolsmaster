@@ -45,11 +45,11 @@ Deno.serve(async (req) => {
           {
             role: "system",
             content:
-              "You are an expert exam writer. Given source content, write high-quality multiple-choice questions. Each question MUST have exactly 4 plausible options, exactly 1 correct answer, and a short explanation grounded in the source. Cover varied topics from the content. Never invent facts not present in the source.",
+              `You are an expert ${subjectClean} exam writer and subject-matter specialist. Write high-quality multiple-choice questions that strictly match the terminology, concepts, conventions, notation, and difficulty level expected in ${subjectClean}. Ground every question in the provided source content — never invent facts that are not present or implied. Each question MUST have exactly 4 plausible options, exactly 1 correct answer, and a concise explanation citing the source reasoning. Mix easy, medium, and hard items appropriately for ${subjectClean}.`,
           },
           {
             role: "user",
-            content: `Create ${numQuestions} diverse multiple-choice questions from the following content. Randomize the position of the correct option across questions.\n\nReturn ONLY valid JSON (no markdown, no commentary) shaped exactly as:\n{"questions":[{"question":"...","options":["A","B","C","D"],"correctIndex":0,"explanation":"..."}]}\n\nSOURCE CONTENT:\n\n${trimmed}`,
+            content: `Subject: ${subjectClean}\n\nCreate ${numQuestions} diverse, subject-specific multiple-choice questions from the SOURCE CONTENT below. Frame questions using ${subjectClean} terminology and typical question styles for this field. Randomize the position of the correct option across questions.\n\nReturn ONLY valid JSON (no markdown, no commentary) shaped exactly as:\n{"questions":[{"question":"...","options":["A","B","C","D"],"correctIndex":0,"explanation":"..."}]}\n\nSOURCE CONTENT:\n\n${trimmed}`,
           },
         ],
         response_format: { type: "json_object" },
