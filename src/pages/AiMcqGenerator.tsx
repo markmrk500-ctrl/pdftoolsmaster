@@ -34,9 +34,28 @@ interface McqQuestion {
 
 type Provider = "openai" | "gemini";
 
+const SUBJECTS = [
+  "Biology",
+  "Chemistry",
+  "Physics",
+  "Mathematics",
+  "Computer Science",
+  "English",
+  "Business",
+  "Medical",
+  "Engineering",
+  "Law",
+  "History",
+  "Economics",
+  "Accounting",
+] as const;
+
+const CUSTOM = "__custom__";
+
 const faqs = [
   { question: "Which file types are supported?", answer: "PDF, DOCX, and TXT files up to 50MB. You can also paste raw text directly." },
-  { question: "How are the questions generated?", answer: "Your selected content is sent to Lovable AI (OpenAI GPT-5 or Google Gemini). The model writes 4-option MCQs with one correct answer and a short explanation." },
+  { question: "Why do I need to pick a subject?", answer: "The subject tunes the AI to use the right terminology, notation, and difficulty for your field — so MCQs from a Biology PDF feel like real Biology questions, not generic ones." },
+  { question: "How are the questions generated?", answer: "Your selected content plus your chosen subject are sent to Lovable AI (OpenAI GPT-5 or Google Gemini). The model writes 4-option MCQs with one correct answer and an explanation." },
   { question: "Can I limit which pages are used?", answer: "Yes. For PDFs you can specify a page range (e.g. 3-12). Only that portion of the document is sent to the AI." },
   { question: "How many questions can I generate?", answer: "Between 5 and 50 questions per quiz. Larger quizzes take a few extra seconds." },
 ];
