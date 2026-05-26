@@ -405,25 +405,30 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Category nav */}
+        {/* Category nav — horizontal scrolling toolbar, sticky on scroll */}
         {!q && (
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
-            {categories.map((c) => (
-              <a
-                key={c.id}
-                href={`#${c.id}`}
-                className="px-4 py-2 text-sm font-medium rounded-full border border-border bg-card hover:border-primary hover:text-primary transition-colors"
-              >
-                {c.name}
-              </a>
-            ))}
+          <div className="sticky top-16 z-20 -mx-4 px-4 mb-10 bg-background/85 backdrop-blur-md border-y border-border/60 py-3">
+            <nav aria-label="Tool categories" className="toolbar-scroll max-w-7xl mx-auto">
+              {categories.map((c) => (
+                <a
+                  key={c.id}
+                  href={`#${c.id}`}
+                  className="px-4 py-2 text-sm font-medium rounded-full border border-border bg-card whitespace-nowrap hover:border-primary hover:text-primary hover:bg-accent transition-colors"
+                >
+                  {c.name}
+                  <span className="ml-2 text-xs text-muted-foreground font-normal">
+                    {c.tools.length}
+                  </span>
+                </a>
+              ))}
+            </nav>
           </div>
         )}
 
         <div className="space-y-14">
           {filteredCategories.length > 0 ? (
             filteredCategories.map((cat) => (
-              <div key={cat.id} id={cat.id} className="scroll-mt-20">
+              <div key={cat.id} id={cat.id} className="scroll-mt-32">
                 <div className="flex items-end justify-between gap-4 mb-5 border-b border-border pb-3">
                   <div>
                     <h3 className="text-xl md:text-2xl font-bold">{cat.name}</h3>
@@ -433,17 +438,18 @@ const Index = () => {
                     {cat.tools.length} tools
                   </span>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
                   {cat.tools.map((t) => (
-                    <Link key={t.to} to={t.to} className="tool-card group block relative">
+                    <Link key={t.to} to={t.to} className="tool-card group block relative" aria-label={`${t.title} — ${t.description}`}>
                       {t.isNew && (
                         <span className="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider bg-primary text-primary-foreground px-2 py-0.5 rounded-full">
                           New
                         </span>
                       )}
                       <div
-                        className="h-12 w-12 rounded-xl flex items-center justify-center mb-4 text-white"
+                        className="h-12 w-12 rounded-xl flex items-center justify-center mb-4 text-white shadow-sm"
                         style={{ backgroundColor: `hsl(var(--${t.color}))` }}
+                        aria-hidden="true"
                       >
                         <t.icon className="h-6 w-6" />
                       </div>
