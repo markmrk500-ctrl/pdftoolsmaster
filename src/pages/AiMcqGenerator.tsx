@@ -205,8 +205,11 @@ const AiMcqGenerator = () => {
   };
 
   const allAnswered = answers.length > 0 && answers.every((a) => a !== null);
+  const subjectReady =
+    subjectChoice !== CUSTOM || customSubject.trim().length >= 2;
   const canGenerate =
     !processing &&
+    subjectReady &&
     ((mode === "paste" && pastedText.trim().length >= 100) || (mode === "file" && !!file));
 
   return (
