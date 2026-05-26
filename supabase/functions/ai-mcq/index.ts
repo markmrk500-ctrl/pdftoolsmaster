@@ -4,6 +4,7 @@ interface McqRequest {
   text: string;
   count?: number;
   provider?: "openai" | "gemini";
+  subject?: string;
 }
 
 const MODEL_MAP = {
