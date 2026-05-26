@@ -284,6 +284,35 @@ const AiMcqGenerator = () => {
                 </TabsContent>
               </Tabs>
 
+              <div className="space-y-1.5">
+                <Label htmlFor="subject">Subject / Category</Label>
+                <Select value={subjectChoice} onValueChange={setSubjectChoice}>
+                  <SelectTrigger id="subject">
+                    <SelectValue placeholder="Choose a subject" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SUBJECTS.map((s) => (
+                      <SelectItem key={s} value={s}>{s}</SelectItem>
+                    ))}
+                    <SelectItem value={CUSTOM}>Custom subject…</SelectItem>
+                  </SelectContent>
+                </Select>
+                {subjectChoice === CUSTOM && (
+                  <Input
+                    autoFocus
+                    placeholder="e.g. Constitutional Law, Organic Chemistry, Machine Learning"
+                    value={customSubject}
+                    onChange={(e) => setCustomSubject(e.target.value)}
+                    maxLength={80}
+                    className="mt-2"
+                  />
+                )}
+                <p className="text-xs text-muted-foreground">
+                  The AI tailors terminology, notation, and difficulty to this subject.
+                </p>
+              </div>
+
+
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label htmlFor="count">Number of questions</Label>
