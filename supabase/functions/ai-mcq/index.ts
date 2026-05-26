@@ -16,7 +16,8 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    const { text, count = 10, provider = "gemini" } = (await req.json()) as McqRequest;
+    const { text, count = 10, provider = "gemini", subject = "General Knowledge" } = (await req.json()) as McqRequest;
+    const subjectClean = String(subject).trim().slice(0, 80) || "General Knowledge";
 
     if (!text || typeof text !== "string" || text.trim().length < 100) {
       return new Response(
