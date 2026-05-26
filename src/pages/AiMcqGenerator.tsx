@@ -163,9 +163,15 @@ const AiMcqGenerator = () => {
         throw new Error("Not enough text found. Please use a longer source or different page range.");
       }
 
+      const subject =
+        subjectChoice === CUSTOM ? customSubject.trim() : subjectChoice;
+      if (!subject) {
+        throw new Error("Please choose a subject (or enter a custom one).");
+      }
+
       setProgress(70);
       const { data, error: fnError } = await supabase.functions.invoke("ai-mcq", {
-        body: { text, count, provider },
+        body: { text, count, provider, subject },
       });
       if (fnError) throw fnError;
       if (data?.error) throw new Error(data.error);
