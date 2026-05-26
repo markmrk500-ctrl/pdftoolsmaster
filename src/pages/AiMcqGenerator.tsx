@@ -91,6 +91,8 @@ const AiMcqGenerator = () => {
   const [toPage, setToPage] = useState<number | "">("");
   const [count, setCount] = useState(10);
   const [provider, setProvider] = useState<Provider>("gemini");
+  const [subjectChoice, setSubjectChoice] = useState<string>("Biology");
+  const [customSubject, setCustomSubject] = useState("");
 
   const [progress, setProgress] = useState(0);
   const [processing, setProcessing] = useState(false);
