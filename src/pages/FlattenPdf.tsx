@@ -39,7 +39,7 @@ const FlattenPdf = () => {
         const ctx = canvas.getContext("2d")!;
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-        await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+        await page.render({ canvasContext: ctx, viewport } as any).promise;
         const jpg = canvas.toDataURL("image/jpeg", 0.92);
         const jpgBytes = await (await fetch(jpg)).arrayBuffer();
         const img = await out.embedJpg(jpgBytes);

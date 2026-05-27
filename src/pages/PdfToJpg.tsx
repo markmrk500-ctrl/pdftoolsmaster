@@ -52,7 +52,7 @@ const PdfToJpg = () => {
         const ctx = canvas.getContext("2d")!;
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-        await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+        await page.render({ canvasContext: ctx, viewport } as any).promise;
         const blob = await new Promise<Blob>((res) =>
           canvas.toBlob((b) => res(b!), "image/jpeg", 0.92)
         );

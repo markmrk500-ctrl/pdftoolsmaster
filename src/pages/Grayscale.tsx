@@ -51,7 +51,7 @@ const Grayscale = () => {
         canvas.width = viewport.width;
         canvas.height = viewport.height;
         const ctx = canvas.getContext("2d")!;
-        await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+        await page.render({ canvasContext: ctx, viewport } as any).promise;
 
         // Convert to grayscale
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);

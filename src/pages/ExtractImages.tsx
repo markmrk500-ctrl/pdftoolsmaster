@@ -40,7 +40,7 @@ const ExtractImages = () => {
         const ctx = canvas.getContext("2d")!;
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-        await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+        await page.render({ canvasContext: ctx, viewport } as any).promise;
         const blob = await new Promise<Blob>((r) => canvas.toBlob((b) => r(b!), "image/png"));
         zip.file(`${baseName}-image-${i}.png`, blob);
         setProgress(10 + Math.round((i / pdf.numPages) * 80));
