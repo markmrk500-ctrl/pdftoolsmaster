@@ -160,8 +160,9 @@ export const Header = () => {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border bg-background">
+        <div className="md:hidden border-t border-border bg-background max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain">
           <nav className="container mx-auto px-4 py-3 flex flex-col gap-1">
+
             {allTools.map((t) => (
               <NavLink
                 key={t.to}
