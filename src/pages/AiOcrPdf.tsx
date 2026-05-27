@@ -1,6 +1,5 @@
 import { useState } from "react";
-import * as pdfjsLib from "pdfjs-dist";
-import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { pdfjsLib } from "@/lib/pdfjs";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
 import { FAQ } from "@/components/FAQ";
@@ -11,7 +10,6 @@ import { ScanText, Loader2, Copy, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 const MAX_PAGES = 20;
 

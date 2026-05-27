@@ -1,6 +1,5 @@
 import { useState } from "react";
-import * as pdfjsLib from "pdfjs-dist";
-import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { pdfjsLib } from "@/lib/pdfjs";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
@@ -13,7 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Languages, Loader2, Copy, Download, FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 const LANGUAGES = [
   "Spanish", "French", "German", "Italian", "Portuguese", "Dutch",
