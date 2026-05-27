@@ -88,7 +88,7 @@ const AiOcrPdf = () => {
   return (
     <ToolPageShell
       title="AI OCR for Scanned PDFs — Extract Text from Images Free | PDFMaster"
-      description="Turn scanned PDFs into editable text using AI vision OCR. Reads handwriting, low-quality scans & 100+ languages. Powered by Lovable AI. Free, no signup."
+      description="Turn scanned PDFs into editable text using AI vision OCR. Reads handwriting, low-quality scans & 100+ languages. Powered by advanced AI. Free, no signup."
       keywords="ai ocr pdf, scanned pdf to text, pdf ocr online, image pdf to text, gemini ocr, vision ocr pdf, handwriting pdf to text"
       h1="AI OCR — Scanned PDF to Text"
       intro="Upload a scanned or image-based PDF and let AI vision extract every word — including handwriting and 100+ languages."
@@ -137,7 +137,7 @@ const AiOcrPdf = () => {
           <h3>How It Works</h3>
           <ol>
             <li>Each PDF page is rendered as a high-resolution image in your browser.</li>
-            <li>The image is sent securely to Lovable AI's vision model.</li>
+            <li>The image is sent securely to our AI's vision model.</li>
             <li>Extracted text streams back page by page, ready to copy or download.</li>
           </ol>
           <h3>Privacy</h3>

@@ -25,7 +25,7 @@ const faqs = [
   { question: "Which languages are supported?", answer: "Over 20 major languages including Spanish, French, German, Chinese, Japanese, Arabic, Hindi, and more. Pick from the dropdown." },
   { question: "Does the layout get preserved?", answer: "Paragraph structure is preserved, but original PDF visual layout (columns, images, fonts) is not — you get clean translated text or a simple translated PDF." },
   { question: "Is my PDF uploaded?", answer: "No. Text is extracted in your browser. Only the plain text is sent to the AI for translation." },
-  { question: "How accurate is it?", answer: "Powered by Google Gemini via Lovable AI — accuracy is on par with the best general-purpose translators for prose. Specialized legal/medical terms may need expert review." },
+  { question: "How accurate is it?", answer: "Powered by Google Gemini via our AI engine — accuracy is on par with the best general-purpose translators for prose. Specialized legal/medical terms may need expert review." },
 ];
 
 const AiTranslatePdf = () => {
@@ -191,7 +191,7 @@ const AiTranslatePdf = () => {
   return (
     <ToolPageShell
       title="AI PDF Translator — Translate PDFs Online Free in 20+ Languages | PDFMaster"
-      description="Translate any PDF into Spanish, French, German, Chinese, Arabic, Hindi & more with AI. Free, fast, no signup. Powered by Lovable AI."
+      description="Translate any PDF into Spanish, French, German, Chinese, Arabic, Hindi & more with AI. Free, fast, no signup. Powered by advanced AI."
       keywords="ai pdf translator, translate pdf online, pdf translation free, gemini pdf translate, translate pdf to spanish, pdf to french"
       h1="AI PDF Translator"
       intro="Upload a PDF, pick a language, and get an instant AI translation. Streams in real-time and exports as text or PDF."
@@ -237,7 +237,7 @@ const AiTranslatePdf = () => {
         <>
           <h2>Translate Any PDF — 20+ Languages, Free, No Signup</h2>
           <p>
-            The AI PDF Translator reads the text of your PDF and renders a fluent translation in your chosen language using Google Gemini through the Lovable AI gateway. Translations stream live as they're generated, so you see results instantly instead of waiting for a single big response.
+            The AI PDF Translator reads the text of your PDF and renders a fluent translation in your chosen language using Google Gemini through the AI gateway. Translations stream live as they're generated, so you see results instantly instead of waiting for a single big response.
           </p>
           <h3>Supported Languages</h3>
           <p>

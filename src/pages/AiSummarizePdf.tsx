@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const faqs = [
   { question: "Is my PDF uploaded to a server?", answer: "Only the extracted text is sent securely to our AI backend for summarization. The PDF file itself never leaves your browser." },
-  { question: "Which AI model powers the summary?", answer: "We use Lovable AI (Google Gemini) tuned for fast, accurate document summarization. No API key needed — it's built in." },
+  { question: "Which AI model powers the summary?", answer: "We use our AI engine (Google Gemini) tuned for fast, accurate document summarization. No API key needed — it's built in." },
   { question: "Can it summarize scanned PDFs?", answer: "Scanned PDFs have no text layer. Run them through our AI OCR tool first, then paste the result into the AI Summarizer." },
   { question: "Are there length limits?", answer: "We process up to ~60,000 characters at a time (roughly 100 PDF pages). For larger docs, summarize in chunks." },
 ];
@@ -79,10 +79,10 @@ const AiSummarizePdf = () => {
   return (
     <ToolPageShell
       title="AI PDF Summarizer — Free Online TL;DR & Key Points | PDFMaster"
-      description="Summarize any PDF instantly with AI. Get a TL;DR, key points, and section-by-section summary. Powered by Lovable AI — no signup, no API key."
+      description="Summarize any PDF instantly with AI. Get a TL;DR, key points, and section-by-section summary. Powered by our AI — no signup, no API key."
       keywords="ai pdf summarizer, summarize pdf online, pdf tldr, pdf key points, ai document summary, gemini pdf summary"
       h1="AI PDF Summarizer"
-      intro="Upload any PDF and get an instant AI-generated TL;DR, key takeaways, and section summaries — powered by Lovable AI."
+      intro="Upload any PDF and get an instant AI-generated TL;DR, key takeaways, and section summaries — powered by our AI."
       faqSchema={faqs}
       breadcrumbName="AI PDF Summarizer"
       breadcrumbPath="/ai-summarize-pdf"
@@ -122,7 +122,7 @@ const AiSummarizePdf = () => {
           <h3>How It Works</h3>
           <ol>
             <li>Upload your PDF — text is extracted locally in your browser.</li>
-            <li>The text is sent securely to our AI backend (Lovable AI / Gemini).</li>
+            <li>The text is sent securely to our AI backend (our AI (Google Gemini)).</li>
             <li>You get back a structured Markdown summary in seconds.</li>
           </ol>
           <h3>Common Use Cases</h3>
