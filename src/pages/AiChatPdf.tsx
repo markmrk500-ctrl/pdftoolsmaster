@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import * as pdfjsLib from "pdfjs-dist";
-import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { pdfjsLib } from "@/lib/pdfjs";
 import ReactMarkdown from "react-markdown";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FAQ } from "@/components/FAQ";
@@ -11,7 +10,6 @@ import { MessageSquare, Loader2, Send, Upload, FileText, X, Sparkles, RotateCcw,
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 interface ChatMessage {
   role: "user" | "assistant";

@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import * as pdfjsLib from "pdfjs-dist";
-import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { pdfjsLib } from "@/lib/pdfjs";
 import mammoth from "mammoth/mammoth.browser";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FAQ } from "@/components/FAQ";
@@ -23,7 +22,6 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 interface McqQuestion {
   question: string;

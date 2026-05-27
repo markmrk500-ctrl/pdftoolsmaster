@@ -124,7 +124,10 @@ export const Header = () => {
             <DropdownMenuTrigger className="px-3 py-2 text-sm font-medium rounded-md text-foreground/70 hover:text-primary inline-flex items-center gap-1 outline-none">
               All Tools <ChevronDown className="h-3.5 w-3.5" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[560px] p-3 grid grid-cols-2 gap-3">
+            <DropdownMenuContent
+              align="end"
+              className="w-[min(560px,calc(100vw-1rem))] max-h-[70vh] overflow-y-auto p-3 grid grid-cols-1 sm:grid-cols-2 gap-3 overscroll-contain"
+            >
               {categoryGroups.map((g) => (
                 <div key={g.name} className="space-y-1">
                   <div className="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -157,8 +160,9 @@ export const Header = () => {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border bg-background">
+        <div className="md:hidden border-t border-border bg-background max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain">
           <nav className="container mx-auto px-4 py-3 flex flex-col gap-1">
+
             {allTools.map((t) => (
               <NavLink
                 key={t.to}
