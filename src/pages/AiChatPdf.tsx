@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { pdfjsLib } from "@/lib/pdfjs";
 import ReactMarkdown from "react-markdown";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FAQ } from "@/components/FAQ";
@@ -9,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { MessageSquare, Loader2, Send, Upload, FileText, X, Sparkles, RotateCcw, User } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { extractPdfPages, readAiStream } from "@/lib/aiToolCompat";
 
 
 interface ChatMessage {
@@ -104,26 +104,13 @@ const AiChatPdf = () => {
     setExtracting(true);
     setExtractProgress(0);
     try {
-      const bytes = await f.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
-      const out: PageChunk[] = [];
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        const text = (content.items as any[])
-          .map((it) => ("str" in it ? it.str : ""))
-          .join(" ")
-          .replace(/\s+/g, " ")
-          .trim();
-        out.push({ page: i, text });
-        setExtractProgress(Math.round((i / pdf.numPages) * 100));
-      }
+      const { pages: out, totalPages } = await extractPdfPages(f, setExtractProgress);
       const usable = out.filter((p) => p.text.length > 0);
       if (usable.length === 0) {
         throw new Error("No selectable text found. If this is a scanned PDF, use AI OCR first.");
       }
       setPages(out);
-      toast({ title: "PDF ready", description: `${pdf.numPages} pages indexed. Start chatting!` });
+      toast({ title: "PDF ready", description: `${totalPages} pages indexed. Start chatting!` });
     } catch (e: any) {
       toast({ title: "Failed to read PDF", description: e?.message || "Try a different file.", variant: "destructive" });
       setFile(null);
@@ -174,49 +161,14 @@ const AiChatPdf = () => {
         }),
       });
 
-      if (!resp.ok || !resp.body) {
-        const errText = await resp.text().catch(() => "");
-        let errMsg = "Request failed.";
-        try {
-          const j = JSON.parse(errText);
-          if (j?.error) errMsg = j.error;
-        } catch {}
-        throw new Error(errMsg);
-      }
-
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
       let assistantText = "";
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-
-        let nl: number;
-        while ((nl = buffer.indexOf("\n")) !== -1) {
-          const line = buffer.slice(0, nl).trim();
-          buffer = buffer.slice(nl + 1);
-          if (!line.startsWith("data:")) continue;
-          const payload = line.slice(5).trim();
-          if (payload === "[DONE]") continue;
-          try {
-            const json = JSON.parse(payload);
-            const delta = json.choices?.[0]?.delta?.content;
-            if (delta) {
-              assistantText += delta;
-              setMessages((prev) => {
-                const copy = [...prev];
-                copy[copy.length - 1] = { role: "assistant", content: assistantText };
-                return copy;
-              });
-            }
-          } catch {
-            // ignore partial JSON
-          }
-        }
-      }
+      assistantText = await readAiStream(resp, (_delta, fullText) => {
+        setMessages((prev) => {
+          const copy = [...prev];
+          copy[copy.length - 1] = { role: "assistant", content: fullText };
+          return copy;
+        });
+      });
 
       if (!assistantText) {
         setMessages((prev) => {
@@ -243,7 +195,7 @@ const AiChatPdf = () => {
     } finally {
       setStreaming(false);
       abortRef.current = null;
-      inputRef.current?.focus();
+      if (!window.matchMedia?.("(pointer: coarse)").matches) inputRef.current?.focus();
     }
   };
 
@@ -292,7 +244,7 @@ const AiChatPdf = () => {
               </div>
             </label>
           ) : (
-            <div className="rounded-xl border border-border bg-card overflow-hidden flex flex-col h-[600px]">
+            <div className="rounded-xl border border-border bg-card overflow-hidden flex flex-col h-[min(600px,calc(100vh-8rem))] min-h-[520px] max-[640px]:min-h-[460px]">
               {/* Header */}
               <div className="flex items-center gap-3 px-4 py-3 border-b border-border bg-secondary/30">
                 <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
@@ -306,8 +258,8 @@ const AiChatPdf = () => {
                   </p>
                 </div>
                 {messages.length > 0 && (
-                  <Button variant="ghost" size="sm" onClick={resetChat} disabled={streaming}>
-                    <RotateCcw className="h-4 w-4" /> Clear
+                  <Button variant="ghost" size="sm" onClick={resetChat} disabled={streaming} className="shrink-0">
+                    <RotateCcw className="h-4 w-4" /> <span className="hidden sm:inline">Clear</span>
                   </Button>
                 )}
                 <Button variant="ghost" size="icon" onClick={removeFile} aria-label="Remove file">
