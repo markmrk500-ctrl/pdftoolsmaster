@@ -69,14 +69,15 @@ export const extractPdfPages = async (
 ): Promise<{ pages: PageTextChunk[]; totalPages: number }> => {
   const bytes = await readFileAsArrayBuffer(file);
   const pdf = await loadPdfDocument(bytes);
+  const totalPages = pdf.numPages;
   const pages: PageTextChunk[] = [];
 
   try {
-    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+    for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
       const page = await pdf.getPage(pageNumber);
       const text = await getPageText(page);
       pages.push({ page: pageNumber, text });
-      onProgress?.(Math.round((pageNumber / pdf.numPages) * 100));
+      onProgress?.(Math.round((pageNumber / totalPages) * 100));
       page.cleanup?.();
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
@@ -84,7 +85,7 @@ export const extractPdfPages = async (
     pdf.destroy?.();
   }
 
-  return { pages, totalPages: pdf.numPages };
+  return { pages, totalPages };
 };
 
 export const extractPdfText = async (
@@ -93,8 +94,9 @@ export const extractPdfText = async (
 ): Promise<{ text: string; totalPages: number }> => {
   const bytes = await readFileAsArrayBuffer(file);
   const pdf = await loadPdfDocument(bytes);
+  const totalPages = pdf.numPages;
   const start = Math.max(1, options.fromPage || 1);
-  const end = Math.min(pdf.numPages, options.toPage || pdf.numPages);
+  const end = Math.min(totalPages, options.toPage || totalPages);
   const total = Math.max(1, end - start + 1);
   let text = "";
 
@@ -110,7 +112,7 @@ export const extractPdfText = async (
     pdf.destroy?.();
   }
 
-  return { text, totalPages: pdf.numPages };
+  return { text, totalPages };
 };
 
 export const renderPdfPagesAsImages = async (
@@ -120,7 +122,8 @@ export const renderPdfPagesAsImages = async (
 ): Promise<{ images: string[]; totalPages: number }> => {
   const bytes = await readFileAsArrayBuffer(file);
   const pdf = await loadPdfDocument(bytes);
-  const total = Math.min(pdf.numPages, maxPages);
+  const totalPages = pdf.numPages;
+  const total = Math.min(totalPages, maxPages);
   const images: string[] = [];
 
   try {
@@ -149,7 +152,7 @@ export const renderPdfPagesAsImages = async (
     pdf.destroy?.();
   }
 
-  return { images, totalPages: pdf.numPages };
+  return { images, totalPages };
 };
 
 const parseSseText = (raw: string, onDelta?: (delta: string) => void) => {
