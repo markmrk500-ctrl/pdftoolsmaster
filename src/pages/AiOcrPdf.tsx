@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScanText, Loader2, Copy, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { copyTextSafely, downloadBlobSafely, extractPdfPages } from "@/lib/aiToolCompat";
+import { copyTextSafely, downloadBlobSafely, renderPdfPagesAsImages } from "@/lib/aiToolCompat";
 
 
 const MAX_PAGES = 20;
@@ -32,24 +32,25 @@ const AiOcrPdf = () => {
     setText("");
     setProgress(2);
     try {
-      const { pages, totalPages } = await extractPdfPages(file, (p) => setProgress(Math.min(20, Math.round(p * 0.2))));
+      const { images, totalPages } = await renderPdfPagesAsImages(file, MAX_PAGES, (p) => setProgress(Math.min(35, Math.round(p * 0.35))));
       const total = Math.min(totalPages, MAX_PAGES);
       if (totalPages > MAX_PAGES) {
         toast({ title: `Processing first ${MAX_PAGES} pages`, description: `Your PDF has ${totalPages} pages. Split it for full coverage.` });
       }
       let acc = "";
       for (let i = 1; i <= total; i++) {
-        const pageText = pages[i - 1]?.text || "";
+        const base64 = images[i - 1];
+        if (!base64) throw new Error("Could not render one of the PDF pages.");
 
         const { data, error } = await supabase.functions.invoke("ai-ocr", {
-          body: { text: pageText, pageNumber: i },
+          body: { imageBase64: base64, mimeType: "image/jpeg" },
         });
         if (error) throw error;
         if (data?.error) throw new Error(data.error);
 
         acc += `--- Page ${i} ---\n${data?.text || ""}\n\n`;
         setText(acc);
-        setProgress(20 + Math.round((i / total) * 80));
+        setProgress(35 + Math.round((i / total) * 65));
       }
       toast({ title: "OCR complete", description: `${total} page(s) processed.` });
     } catch (e: any) {
