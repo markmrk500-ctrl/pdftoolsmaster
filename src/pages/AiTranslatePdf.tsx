@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { pdfjsLib } from "@/lib/pdfjs";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
@@ -11,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Languages, Loader2, Copy, Download, FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { copyTextSafely, downloadBlobSafely, extractPdfText, readAiStream } from "@/lib/aiToolCompat";
 
 
 const LANGUAGES = [
@@ -35,25 +35,13 @@ const AiTranslatePdf = () => {
   const [progress, setProgress] = useState(0);
   const [processing, setProcessing] = useState(false);
 
-  const extractText = async (f: File): Promise<string> => {
-    const bytes = await f.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
-    let text = "";
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      text += (content.items as any[]).map((it) => ("str" in it ? it.str : "")).join(" ") + "\n\n";
-    }
-    return text;
-  };
-
   const handleTranslate = async () => {
     if (!file) return;
     setProcessing(true);
     setTranslated("");
     setProgress(10);
     try {
-      const text = await extractText(file);
+      const { text } = await extractPdfText(file, { onProgress: (p) => setProgress(10 + Math.round(p * 0.25)) });
       if (!text.trim()) {
         toast({ title: "No text found", description: "Try AI OCR for scanned PDFs.", variant: "destructive" });
         setProcessing(false);
@@ -72,44 +60,9 @@ const AiTranslatePdf = () => {
         body: JSON.stringify({ text, targetLanguage: language }),
       });
 
-      if (!resp.ok || !resp.body) {
-        const err = await resp.json().catch(() => ({}));
-        throw new Error(err.error || `Request failed (${resp.status})`);
-      }
-
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let acc = "";
-      let done = false;
       setProgress(50);
-
-      while (!done) {
-        const { done: d, value } = await reader.read();
-        if (d) break;
-        buffer += decoder.decode(value, { stream: true });
-        let nl: number;
-        while ((nl = buffer.indexOf("\n")) !== -1) {
-          let line = buffer.slice(0, nl);
-          buffer = buffer.slice(nl + 1);
-          if (line.endsWith("\r")) line = line.slice(0, -1);
-          if (line.startsWith(":") || !line.trim()) continue;
-          if (!line.startsWith("data: ")) continue;
-          const json = line.slice(6).trim();
-          if (json === "[DONE]") { done = true; break; }
-          try {
-            const parsed = JSON.parse(json);
-            const delta = parsed.choices?.[0]?.delta?.content;
-            if (delta) {
-              acc += delta;
-              setTranslated(acc);
-            }
-          } catch {
-            buffer = line + "\n" + buffer;
-            break;
-          }
-        }
-      }
+      const finalText = await readAiStream(resp, (_delta, fullText) => setTranslated(fullText));
+      if (!finalText.trim()) throw new Error("The AI returned an empty translation. Please try again.");
       setProgress(100);
       toast({ title: `Translated to ${language}` });
     } catch (e: any) {
@@ -122,18 +75,13 @@ const AiTranslatePdf = () => {
   };
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(translated);
+    await copyTextSafely(translated);
     toast({ title: "Copied to clipboard" });
   };
 
   const handleDownloadTxt = () => {
     const blob = new Blob([translated], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = (file?.name.replace(/\.pdf$/i, "") || "translated") + `-${language}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadBlobSafely(blob, (file?.name.replace(/\.pdf$/i, "") || "translated") + `-${language}.txt`);
   };
 
   const handleDownloadPdf = async () => {
@@ -164,7 +112,8 @@ const AiTranslatePdf = () => {
         return out;
       };
 
-      const lines = translated.split("\n").flatMap(wrap);
+      const lines: string[] = [];
+      translated.split("\n").forEach((line) => lines.push(...wrap(line)));
       let page = pdf.addPage([pageW, pageH]);
       let y = pageH - margin;
       for (const line of lines) {
@@ -175,12 +124,7 @@ const AiTranslatePdf = () => {
       }
       const out = await pdf.save();
       const blob = new Blob([out as BlobPart], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = (file?.name.replace(/\.pdf$/i, "") || "translated") + `-${language}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
+      downloadBlobSafely(blob, (file?.name.replace(/\.pdf$/i, "") || "translated") + `-${language}.pdf`);
       toast({ title: "PDF downloaded", description: "Note: non-Latin characters may render as '?' due to PDF font limits — use .txt for full Unicode." });
     } catch (e) {
       console.error(e);
