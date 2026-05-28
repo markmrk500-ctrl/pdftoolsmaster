@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { pdfjsLib } from "@/lib/pdfjs";
 import ReactMarkdown from "react-markdown";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
@@ -9,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { Sparkles, Loader2, Copy, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { copyTextSafely, downloadBlobSafely, extractPdfText } from "@/lib/aiToolCompat";
 
 
 const faqs = [
@@ -30,15 +30,7 @@ const AiSummarizePdf = () => {
     setSummary("");
     setProgress(5);
     try {
-      const bytes = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
-      let text = "";
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        text += (content.items as any[]).map((it) => ("str" in it ? it.str : "")).join(" ") + "\n\n";
-        setProgress(5 + Math.round((i / pdf.numPages) * 45));
-      }
+      const { text } = await extractPdfText(file, { onProgress: (p) => setProgress(5 + Math.round(p * 0.45)) });
       if (!text.trim()) {
         toast({ title: "No text found", description: "This PDF may be scanned. Try the AI OCR tool first.", variant: "destructive" });
         setProcessing(false);
@@ -62,18 +54,13 @@ const AiSummarizePdf = () => {
   };
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(summary);
+    await copyTextSafely(summary);
     toast({ title: "Copied to clipboard" });
   };
 
   const handleDownload = () => {
     const blob = new Blob([summary], { type: "text/markdown;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = (file?.name.replace(/\.pdf$/i, "") || "summary") + "-summary.md";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadBlobSafely(blob, (file?.name.replace(/\.pdf$/i, "") || "summary") + "-summary.md");
   };
 
   return (
@@ -105,7 +92,7 @@ const AiSummarizePdf = () => {
               <div className="prose prose-slate dark:prose-invert max-w-none rounded-xl border border-border bg-card p-5">
                 <ReactMarkdown>{summary}</ReactMarkdown>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Button variant="outline" onClick={handleCopy}><Copy className="h-4 w-4" /> Copy</Button>
                 <Button onClick={handleDownload}><Download className="h-4 w-4" /> Download .md</Button>
               </div>

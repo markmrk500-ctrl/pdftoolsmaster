@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { pdfjsLib } from "@/lib/pdfjs";
 import mammoth from "mammoth/mammoth.browser";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FAQ } from "@/components/FAQ";
@@ -21,6 +20,7 @@ import { Sparkles, Loader2, ChevronLeft, ChevronRight, Check, X, RotateCcw } fro
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { extractPdfText, readFileAsArrayBuffer, readFileAsText } from "@/lib/aiToolCompat";
 
 
 interface McqQuestion {
@@ -58,28 +58,13 @@ const faqs = [
   { question: "How many questions can I generate?", answer: "Between 5 and 50 questions per quiz. Larger quizzes take a few extra seconds." },
 ];
 
-const extractPdfText = async (file: File, fromPage: number, toPage: number, onProgress: (p: number) => void) => {
-  const bytes = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
-  const start = Math.max(1, fromPage || 1);
-  const end = Math.min(pdf.numPages, toPage || pdf.numPages);
-  let text = "";
-  for (let i = start; i <= end; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    text += (content.items as any[]).map((it) => ("str" in it ? it.str : "")).join(" ") + "\n\n";
-    onProgress(Math.round(((i - start + 1) / (end - start + 1)) * 50));
-  }
-  return { text, totalPages: pdf.numPages };
-};
-
 const extractDocxText = async (file: File) => {
-  const buf = await file.arrayBuffer();
+  const buf = await readFileAsArrayBuffer(file);
   const result = await mammoth.extractRawText({ arrayBuffer: buf });
   return result.value;
 };
 
-const extractTxtText = async (file: File) => await file.text();
+const extractTxtText = async (file: File) => await readFileAsText(file);
 
 const AiMcqGenerator = () => {
   const [mode, setMode] = useState<"file" | "paste">("file");
@@ -129,6 +114,10 @@ const AiMcqGenerator = () => {
       toast({ title: "Unsupported file", description: "Please upload a PDF, DOCX, or TXT file.", variant: "destructive" });
       return;
     }
+    if (f.size > 50 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Maximum file size is 50MB.", variant: "destructive" });
+      return;
+    }
     setFile(f);
     setFromPage("");
     setToPage("");
@@ -146,7 +135,11 @@ const AiMcqGenerator = () => {
         text = pastedText.trim();
       } else if (file) {
         if (isPdf) {
-          const { text: t } = await extractPdfText(file, Number(fromPage) || 1, Number(toPage) || 0, (p) => setProgress(5 + p / 2));
+          const { text: t } = await extractPdfText(file, {
+            fromPage: Number(fromPage) || 1,
+            toPage: Number(toPage) || 0,
+            onProgress: (p) => setProgress(5 + Math.round(p * 0.5)),
+          });
           text = t;
         } else if (isDocx) {
           setProgress(30);
@@ -245,7 +238,7 @@ const AiMcqGenerator = () => {
                     />
                   </div>
                   {file && isPdf && (
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="space-y-1.5">
                         <Label htmlFor="from-page">From page</Label>
                         <Input
@@ -311,7 +304,7 @@ const AiMcqGenerator = () => {
               </div>
 
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label htmlFor="count">Number of questions</Label>
                   <Select value={String(count)} onValueChange={(v) => setCount(Number(v))}>
