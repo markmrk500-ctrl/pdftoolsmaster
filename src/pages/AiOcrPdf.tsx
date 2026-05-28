@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { pdfjsLib } from "@/lib/pdfjs";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
 import { FAQ } from "@/components/FAQ";
@@ -9,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScanText, Loader2, Copy, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { copyTextSafely, downloadBlobSafely, extractPdfPages } from "@/lib/aiToolCompat";
 
 
 const MAX_PAGES = 20;
@@ -32,33 +32,24 @@ const AiOcrPdf = () => {
     setText("");
     setProgress(2);
     try {
-      const bytes = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
-      const total = Math.min(pdf.numPages, MAX_PAGES);
-      if (pdf.numPages > MAX_PAGES) {
-        toast({ title: `Processing first ${MAX_PAGES} pages`, description: `Your PDF has ${pdf.numPages} pages. Split it for full coverage.` });
+      const { pages, totalPages } = await extractPdfPages(file, (p) => setProgress(Math.min(20, Math.round(p * 0.2))));
+      const total = Math.min(totalPages, MAX_PAGES);
+      if (totalPages > MAX_PAGES) {
+        toast({ title: `Processing first ${MAX_PAGES} pages`, description: `Your PDF has ${totalPages} pages. Split it for full coverage.` });
       }
       let acc = "";
       for (let i = 1; i <= total; i++) {
-        const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 2 });
-        const canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        const ctx = canvas.getContext("2d")!;
-        await page.render({ canvasContext: ctx, viewport, canvas } as any).promise;
-        const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
-        const base64 = dataUrl.split(",")[1];
+        const pageText = pages[i - 1]?.text || "";
 
         const { data, error } = await supabase.functions.invoke("ai-ocr", {
-          body: { imageBase64: base64, mimeType: "image/jpeg" },
+          body: { text: pageText, pageNumber: i },
         });
         if (error) throw error;
         if (data?.error) throw new Error(data.error);
 
         acc += `--- Page ${i} ---\n${data?.text || ""}\n\n`;
         setText(acc);
-        setProgress(Math.round((i / total) * 100));
+        setProgress(20 + Math.round((i / total) * 80));
       }
       toast({ title: "OCR complete", description: `${total} page(s) processed.` });
     } catch (e: any) {
@@ -71,18 +62,13 @@ const AiOcrPdf = () => {
   };
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(text);
+    await copyTextSafely(text);
     toast({ title: "Copied to clipboard" });
   };
 
   const handleDownload = () => {
     const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = (file?.name.replace(/\.pdf$/i, "") || "ocr") + ".txt";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadBlobSafely(blob, (file?.name.replace(/\.pdf$/i, "") || "ocr") + ".txt");
   };
 
   return (
@@ -112,7 +98,7 @@ const AiOcrPdf = () => {
           {text && (
             <>
               <Textarea value={text} readOnly rows={14} className="font-mono text-xs" />
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Button variant="outline" onClick={handleCopy}><Copy className="h-4 w-4" /> Copy</Button>
                 <Button onClick={handleDownload}><Download className="h-4 w-4" /> Download .txt</Button>
               </div>
