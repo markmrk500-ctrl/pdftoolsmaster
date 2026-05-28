@@ -28,6 +28,19 @@ if (typeof (Array.prototype as any).at !== "function") {
   };
 }
 
+// Small polyfills used by pdf.js and markdown rendering on older mobile WebKit.
+if (typeof (String.prototype as any).replaceAll !== "function") {
+  // eslint-disable-next-line no-extend-native
+  (String.prototype as any).replaceAll = function (search: string | RegExp, replacement: string) {
+    if (search instanceof RegExp) return this.replace(search, replacement);
+    return this.split(search).join(replacement);
+  };
+}
+
+if (typeof (globalThis as any).structuredClone !== "function") {
+  (globalThis as any).structuredClone = (value: unknown) => JSON.parse(JSON.stringify(value));
+}
+
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import workerSrc from "pdfjs-dist/legacy/build/pdf.worker.min.mjs?url";
 
