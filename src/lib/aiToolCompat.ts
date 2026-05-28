@@ -113,6 +113,45 @@ export const extractPdfText = async (
   return { text, totalPages: pdf.numPages };
 };
 
+export const renderPdfPagesAsImages = async (
+  file: File,
+  maxPages: number,
+  onProgress?: ProgressCallback
+): Promise<{ images: string[]; totalPages: number }> => {
+  const bytes = await readFileAsArrayBuffer(file);
+  const pdf = await loadPdfDocument(bytes);
+  const total = Math.min(pdf.numPages, maxPages);
+  const images: string[] = [];
+
+  try {
+    for (let pageNumber = 1; pageNumber <= total; pageNumber += 1) {
+      const page = await pdf.getPage(pageNumber);
+      const baseViewport = page.getViewport({ scale: 1 });
+      const maxSide = Math.max(baseViewport.width, baseViewport.height);
+      const scale = Math.min(1.8, Math.max(1, 1800 / maxSide));
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.floor(viewport.width);
+      canvas.height = Math.floor(viewport.height);
+
+      const context = canvas.getContext("2d", { alpha: false });
+      if (!context) throw new Error("Canvas rendering is not supported on this browser.");
+
+      await page.render({ canvasContext: context, viewport } as any).promise;
+      images.push(canvas.toDataURL("image/jpeg", 0.82).split(",")[1] || "");
+      canvas.width = 1;
+      canvas.height = 1;
+      page.cleanup?.();
+      onProgress?.(Math.round((pageNumber / total) * 100));
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+  } finally {
+    pdf.destroy?.();
+  }
+
+  return { images, totalPages: pdf.numPages };
+};
+
 const parseSseText = (raw: string, onDelta?: (delta: string) => void) => {
   let output = "";
   const lines = raw.split(/\r?\n/);
