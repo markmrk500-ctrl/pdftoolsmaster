@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+    if (!LOVABLE_API_KEY) throw new Error("AI service is not configured");
 
     const trimmedContext = context.slice(0, 80000);
 
@@ -71,15 +71,15 @@ ${trimmedContext}`;
         });
       }
       if (resp.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Add funds in Lovable Cloud → Usage." }), {
+        return new Response(JSON.stringify({ error: "AI usage is temporarily unavailable. Please try again later." }), {
           status: 402,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       const t = await resp.text();
       console.error("AI gateway error:", resp.status, t);
-      return new Response(JSON.stringify({ error: "AI request failed." }), {
-        status: 500,
+      return new Response(JSON.stringify({ error: "AI chat service is temporarily unavailable. Please try again in a moment.", fallback: true }), {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
