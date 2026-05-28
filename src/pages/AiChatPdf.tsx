@@ -5,7 +5,7 @@ import { FAQ } from "@/components/FAQ";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { MessageSquare, Loader2, Send, Upload, FileText, X, Sparkles, RotateCcw, User } from "lucide-react";
+import { Loader2, Send, Upload, FileText, X, Sparkles, RotateCcw, User } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { extractPdfPages, readAiStream } from "@/lib/aiToolCompat";
