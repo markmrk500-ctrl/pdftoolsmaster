@@ -1,3 +1,5 @@
+import "./pdfjsPolyfills";
+
 // Centralized pdfjs-dist setup using the legacy build for maximum
 // browser compatibility (iOS Safari, Samsung Internet, older Android Chrome).
 // All AI tools that parse PDFs should import from here.
