@@ -168,7 +168,7 @@ const AiTranslatePdf = () => {
           {translated && (
             <>
               <Textarea value={translated} readOnly rows={14} className="font-sans text-sm" />
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <Button variant="outline" onClick={handleCopy}><Copy className="h-4 w-4" /> Copy</Button>
                 <Button variant="outline" onClick={handleDownloadTxt}><Download className="h-4 w-4" /> .txt</Button>
                 <Button onClick={handleDownloadPdf}><FileText className="h-4 w-4" /> .pdf</Button>
