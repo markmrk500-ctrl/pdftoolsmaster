@@ -84,9 +84,9 @@ const ExtractText = () => {
 
   return (
     <ToolPageShell
-      title="Extract Text from PDF Online — Free .txt Export | PDFMaster Tools"
-      description="Extract text content from any PDF and copy or download as .txt. Browser-based, secure, no signup. Perfect for AI workflows and content migration."
-      keywords="extract text from pdf, pdf to text, pdf to txt, copy text from pdf, pdf text extractor"
+      title="Extract Text from PDF Online Free – TXT Export on Any Device | Master PDF Tools"
+      description="Extract plain text from any PDF and download as .txt. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Extract Text from PDF Online Free, PDF to TXT Converter, PDF Text Extractor for All Devices, Mobile PDF Text Extract, extract text from pdf, pdf to text, pdf to txt, copy text from pdf, pdf text extractor"
       h1="Extract Text from PDF — Free Online .txt Export"
       intro="Pull all text from your PDF into a clean .txt file you can copy, search, translate, or feed into AI tools."
       faqSchema={faqs}

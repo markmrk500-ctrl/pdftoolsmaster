@@ -92,9 +92,9 @@ const PdfToJpg = () => {
 
   return (
     <ToolPageShell
-      title="PDF to JPG Online — Convert PDF Pages to Images Free | PDFMaster Tools"
-      description="Convert each page of a PDF to a high-quality JPG image online for free. Multiple pages bundled in a ZIP. Browser-based — no upload required."
-      keywords="pdf to jpg, pdf to image, convert pdf to jpg, pdf to png, pdf to jpg converter, pdf page to image"
+      title="PDF to JPG Online Free – Convert PDF Pages to Images on Any Device | Master PDF Tools"
+      description="Convert PDF pages to high-quality JPG images online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="PDF to JPG Online Free, PDF to Image Converter, PDF to JPG for All Devices, Mobile PDF to JPG, Cross-platform PDF to Image, pdf to jpg, pdf to image, convert pdf to jpg, pdf to png, pdf to jpg converter, pdf page to image"
       h1="PDF to JPG Converter — Free Online"
       intro="Turn every page of your PDF into a high-resolution JPG image. Multiple pages download as a single ZIP."
       faqSchema={faqs}

@@ -106,9 +106,9 @@ const HtmlToPdf = () => {
 
   return (
     <ToolPageShell
-      title="HTML to PDF Online — Convert HTML to PDF Free | PDFMaster Tools"
-      description="Convert HTML markup to a PDF document online for free. Render styled HTML/CSS as multi-page A4 PDFs, browser-based, no signup."
-      keywords="html to pdf, convert html to pdf, web page to pdf, html to pdf converter, render html pdf"
+      title="HTML to PDF Online Free – Convert HTML to PDF on Any Device | Master PDF Tools"
+      description="Convert HTML pages and snippets to clean PDFs online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="HTML to PDF Online Free, Web Page to PDF Converter, HTML to PDF for All Devices, Mobile HTML to PDF, html to pdf, convert html to pdf, web page to pdf, html to pdf converter, render html pdf"
       h1="HTML to PDF Converter — Free Online"
       intro="Paste HTML and download it as a PDF rendered with your styles intact, sliced across A4 pages."
       faqSchema={faqs}

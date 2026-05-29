@@ -52,9 +52,9 @@ const WordCount = () => {
 
   return (
     <ToolPageShell
-      title="PDF Word Counter — Count Words, Pages & Reading Time Online Free | PDFMaster"
-      description="Count words, characters, sentences, paragraphs, pages and estimated reading time in any PDF. Free, browser-based, instant analysis."
-      keywords="pdf word counter, count words pdf, pdf statistics, reading time pdf, character count pdf"
+      title="PDF Word Counter Online Free – Words, Pages & Reading Time on Any Device | Master PDF Tools"
+      description="Count words, pages, characters, and reading time in any PDF online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="PDF Word Counter Online Free, PDF Word Count Tool, PDF Reading Time for All Devices, Mobile PDF Word Counter, pdf word counter, count words pdf, pdf statistics, reading time pdf, character count pdf"
       h1="PDF Word Counter & Statistics"
       intro="Get an instant breakdown of your PDF: word count, character count, sentences, paragraphs, pages, and estimated reading time."
       faqSchema={faqs}

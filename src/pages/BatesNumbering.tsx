@@ -63,9 +63,9 @@ const BatesNumbering = () => {
 
   return (
     <ToolPageShell
-      title="Bates Numbering for PDFs — Add Legal Bates Numbers Online Free | PDFMaster"
-      description="Add Bates numbering to every page of a PDF for legal discovery and document production. Custom prefix, start number, and padding. Free and private."
-      keywords="bates numbering, bates stamp pdf, legal bates numbers, pdf bates numbering, document discovery numbering"
+      title="Bates Numbering for PDFs Online Free – Legal Bates Numbers on Any Device | Master PDF Tools"
+      description="Add legal Bates numbers to PDF documents online with prefix, suffix, and start values. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Bates Numbering Online Free, Legal PDF Bates Numbers, PDF Bates Tool for All Devices, Mobile Bates Numbering, bates numbering, bates stamp pdf, legal bates numbers, pdf bates numbering, document discovery numbering"
       h1="Bates Numbering for PDFs"
       intro="Stamp every page with a custom prefix and sequential number — the standard convention for legal discovery and document production."
       faqSchema={faqs}

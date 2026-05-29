@@ -56,9 +56,9 @@ const BlankPdf = () => {
 
   return (
     <ToolPageShell
-      title="Create Blank PDF Online — Generate Empty PDF Pages Free | PDFMaster"
-      description="Generate a blank PDF with custom page size and page count. A4, Letter, Legal, A3, A5. Free, instant, browser-based."
-      keywords="blank pdf, create empty pdf, generate blank pdf, empty pdf template, blank a4 pdf, blank letter pdf"
+      title="Create Blank PDF Online Free – Generate Empty Pages on Any Device | Master PDF Tools"
+      description="Create blank PDFs with custom size and page count online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Create Blank PDF Online Free, Generate Empty PDF, Blank PDF Maker for All Devices, Mobile Blank PDF, blank pdf, create empty pdf, generate blank pdf, empty pdf template, blank a4 pdf, blank letter pdf"
       h1="Create a Blank PDF"
       intro="Generate an empty PDF in any standard page size, with the number of pages you need. Useful for templates, placeholders, and printing."
       faqSchema={faqs}

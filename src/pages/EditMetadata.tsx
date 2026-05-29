@@ -72,9 +72,9 @@ const EditMetadata = () => {
 
   return (
     <ToolPageShell
-      title="Edit PDF Metadata Online — Change Title, Author, Keywords | PDFMaster Tools"
-      description="Edit PDF document properties online for free. Update title, author, subject, and keywords instantly in your browser. Secure, no signup."
-      keywords="edit pdf metadata, change pdf author, pdf properties editor, set pdf title, pdf keywords editor"
+      title="Edit PDF Metadata Online Free – Title, Author, Keywords on Any Device | Master PDF Tools"
+      description="Edit PDF title, author, subject, and keywords online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Edit PDF Metadata Online Free, Change PDF Author, PDF Metadata Editor for All Devices, Mobile PDF Metadata, edit pdf metadata, change pdf author, pdf properties editor, set pdf title, pdf keywords editor"
       h1="Edit PDF Metadata Online"
       intro="Update the document title, author, subject, and keywords stored inside any PDF. Quick, private, and free."
       faqSchema={faqs}

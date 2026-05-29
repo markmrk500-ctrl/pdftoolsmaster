@@ -91,9 +91,9 @@ const Grayscale = () => {
 
   return (
     <ToolPageShell
-      title="PDF to Grayscale Online — Convert PDF to Black & White Free | PDFMaster Tools"
-      description="Convert color PDFs to grayscale online for free. Save ink when printing, reduce file size, browser-based and secure."
-      keywords="pdf to grayscale, pdf to black and white, grayscale pdf, convert color pdf, pdf bw, save ink pdf"
+      title="PDF to Grayscale Online Free – Convert PDF to Black & White on Any Device | Master PDF Tools"
+      description="Convert any PDF to grayscale or black & white online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="PDF to Grayscale Online Free, Black and White PDF Converter, Grayscale PDF for All Devices, Mobile PDF Grayscale, pdf to grayscale, pdf to black and white, grayscale pdf, convert color pdf, pdf bw, save ink pdf"
       h1="PDF to Grayscale — Convert Color PDF to Black & White"
       intro="Convert a color PDF into grayscale (black &amp; white) for cheaper printing, smaller files, and a uniform monochrome look."
       faqSchema={faqs}

@@ -107,9 +107,9 @@ const OrganizePdf = () => {
 
   return (
     <ToolPageShell
-      title="Organize PDF Online — Reorder, Rotate & Delete Pages Free | PDFMaster Tools"
-      description="Visually organize PDF pages: reorder, rotate, and delete pages in one workspace. Free, browser-based, and private — no upload required."
-      keywords="organize pdf, reorder pdf pages, rearrange pdf, pdf page organizer, sort pdf pages"
+      title="Organize PDF Online Free – Reorder, Rotate & Delete Pages on Any Device | Master PDF Tools"
+      description="Reorder, rotate, and delete PDF pages with a visual organizer. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Organize PDF Online Free, Reorder PDF Pages, PDF Organizer for All Devices, Mobile PDF Organizer, organize pdf, reorder pdf pages, rearrange pdf, pdf page organizer, sort pdf pages"
       h1="Organize PDF Pages — Reorder, Rotate, Delete"
       intro="Reorder, rotate, and delete pages in a single workspace — then download the rearranged file."
       faqSchema={faqs}

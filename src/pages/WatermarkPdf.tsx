@@ -85,9 +85,9 @@ const WatermarkPdf = () => {
 
   return (
     <ToolPageShell
-      title="Watermark PDF Online — Add Text Watermark Free | PDFMaster Tools"
-      description="Add a diagonal text watermark to every page of your PDF online for free. Customize text and opacity. Browser-based, secure, no upload."
-      keywords="watermark pdf, add watermark to pdf, pdf watermark, text watermark pdf, confidential watermark, draft watermark"
+      title="Watermark PDF Online Free – Add Text Watermark on Any Device | Master PDF Tools"
+      description="Add text watermarks to PDF online with full styling control. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Watermark PDF Online Free, Add PDF Watermark, PDF Watermark Tool for All Devices, Mobile PDF Watermark, watermark pdf, add watermark to pdf, pdf watermark, text watermark pdf, confidential watermark, draft watermark"
       h1="Add a Watermark to a PDF Online"
       intro="Stamp every page of your PDF with a custom diagonal text watermark like CONFIDENTIAL, DRAFT, or your company name."
       faqSchema={faqs}

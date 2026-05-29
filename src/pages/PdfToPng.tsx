@@ -74,9 +74,9 @@ const PdfToPng = () => {
 
   return (
     <ToolPageShell
-      title="PDF to PNG Online — Convert PDF Pages to PNG Images Free | PDFMaster Tools"
-      description="Convert PDF pages to lossless PNG images online for free. High-resolution, transparent-ready output. Browser-based, secure, no signup."
-      keywords="pdf to png, pdf to png converter, convert pdf to png, pdf page to png image"
+      title="PDF to PNG Online Free – Convert PDF Pages to PNG on Any Device | Master PDF Tools"
+      description="Convert PDF pages to high-resolution PNG images online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="PDF to PNG Online Free, PDF to PNG Converter, PDF to PNG for All Devices, Mobile PDF to PNG, pdf to png, pdf to png converter, convert pdf to png, pdf page to png image"
       h1="PDF to PNG Converter — Free Online"
       intro="Render every page of your PDF as a sharp, lossless PNG image. Multi-page PDFs are delivered as a single ZIP."
       faqSchema={faqs}

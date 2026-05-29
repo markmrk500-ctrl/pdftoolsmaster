@@ -52,9 +52,9 @@ const PdfInfo = () => {
 
   return (
     <ToolPageShell
-      title="PDF Info & Analyzer — View PDF Metadata, Page Sizes Online | PDFMaster Tools"
-      description="Inspect PDF metadata, page count, file size, fonts, and page dimensions online for free. Browser-based, secure, no signup."
-      keywords="pdf info, pdf analyzer, pdf metadata viewer, pdf properties, pdf inspector, pdf page sizes"
+      title="PDF Info & Analyzer Online Free – View PDF Metadata on Any Device | Master PDF Tools"
+      description="View PDF metadata, page sizes, and document info online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="PDF Info Online Free, PDF Analyzer, PDF Metadata Viewer for All Devices, Mobile PDF Info, pdf info, pdf analyzer, pdf metadata viewer, pdf properties, pdf inspector, pdf page sizes"
       h1="PDF Info & Analyzer"
       intro="Inspect any PDF — see metadata, page count, file size, and per-page dimensions in seconds."
       faqSchema={faqs}

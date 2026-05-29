@@ -127,9 +127,9 @@ const CompressPdf = () => {
 
   return (
     <ToolPageShell
-      title="Compress PDF Online — Reduce PDF File Size Free | PDFMaster Tools"
-      description="Compress PDF files online for free. Reduce PDF size up to 70% with smart image downsampling and three quality levels. Fast, secure, browser-based — no signup."
-      keywords="compress pdf, reduce pdf size, pdf compressor, shrink pdf, compress pdf online free, optimize pdf, make pdf smaller"
+      title="Compress PDF Online Free – Reduce PDF Size on Any Device | Master PDF Tools"
+      description="Compress and reduce PDF file size online with AI-friendly optimization. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Compress PDF Online Free, Reduce PDF Size, PDF Compressor for All Devices, Mobile PDF Compressor, Cross-platform PDF Compression, compress pdf, reduce pdf size, pdf compressor, shrink pdf, compress pdf online free, optimize pdf, make pdf smaller"
       h1="Compress PDF Online — Reduce File Size up to 70%"
       intro="Reduce PDF size with smart image downsampling. Choose Low, Medium, or High compression and download instantly — all in your browser."
       faqSchema={faqs}

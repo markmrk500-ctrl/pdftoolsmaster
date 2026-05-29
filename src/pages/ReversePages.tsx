@@ -52,9 +52,9 @@ const ReversePages = () => {
 
   return (
     <ToolPageShell
-      title="Reverse PDF Pages Online — Flip Page Order Free | PDFMaster Tools"
-      description="Reverse the page order of any PDF online for free. Fast, browser-based, no signup. Perfect for fixing duplex scans and reversed exports."
-      keywords="reverse pdf, flip pdf pages, reverse page order, invert pdf pages, pdf page order"
+      title="Reverse PDF Pages Online Free – Flip Page Order on Any Device | Master PDF Tools"
+      description="Reverse the order of pages in any PDF online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Reverse PDF Pages Online Free, Flip PDF Page Order, PDF Reverser for All Devices, Mobile PDF Reverse, reverse pdf, flip pdf pages, reverse page order, invert pdf pages, pdf page order"
       h1="Reverse PDF Pages — Flip the Page Order Instantly"
       intro="Upload your PDF and we'll flip the order of every page in seconds. 100% free and private."
       faqSchema={faqs}

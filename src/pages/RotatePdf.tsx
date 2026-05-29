@@ -66,9 +66,9 @@ const RotatePdf = () => {
 
   return (
     <ToolPageShell
-      title="Rotate PDF Online — Free PDF Page Rotator | PDFMaster Tools"
-      description="Rotate PDF pages 90, 180, or 270 degrees online for free. Fix sideways or upside-down PDFs instantly. Browser-based, secure, no signup required."
-      keywords="rotate pdf, pdf rotator, rotate pdf pages, fix pdf orientation, turn pdf, rotate pdf online free"
+      title="Rotate PDF Online Free – Rotate PDF Pages on Any Device | Master PDF Tools"
+      description="Rotate PDF pages online with a free PDF rotator. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Rotate PDF Online Free, PDF Page Rotator, Rotate PDF on Any Device, Mobile PDF Rotator, Cross-platform PDF Rotate, rotate pdf, pdf rotator, rotate pdf pages, fix pdf orientation, turn pdf, rotate pdf online free"
       h1="Rotate PDF Pages Online — Free PDF Rotator"
       intro="Rotate every page of your PDF clockwise or counter-clockwise. Fix scanned documents, sideways pages, and orientation issues in one click."
       faqSchema={faqs}

@@ -93,9 +93,9 @@ const JpgToPdf = () => {
 
   return (
     <ToolPageShell
-      title="JPG to PDF Online — Convert Images to PDF Free | PDFMaster Tools"
-      description="Convert JPG and PNG images to a single PDF online for free. Reorder pages, combine multiple images, browser-based and secure — no signup."
-      keywords="jpg to pdf, png to pdf, image to pdf, convert image to pdf, jpg to pdf converter, photo to pdf"
+      title="JPG to PDF Online Free – Convert Images to PDF on Any Device | Master PDF Tools"
+      description="Convert JPG, PNG, and image files to PDF online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="JPG to PDF Online Free, Image to PDF Converter, JPG to PDF for All Devices, Mobile Image to PDF, Cross-platform Image to PDF, jpg to pdf, png to pdf, image to pdf, convert image to pdf, jpg to pdf converter, photo to pdf"
       h1="JPG to PDF Converter — Combine Images into One PDF"
       intro="Combine multiple JPG or PNG images into a single PDF document. Reorder, preview, and download — all in your browser."
       faqSchema={faqs}

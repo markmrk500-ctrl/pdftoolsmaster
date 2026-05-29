@@ -80,9 +80,9 @@ const TextToPdf = () => {
 
   return (
     <ToolPageShell
-      title="Text to PDF Converter — Convert Plain Text to PDF Online Free | PDFMaster"
-      description="Convert any plain text into a clean, paginated PDF. Free, browser-based, no signup. Auto word wrap and pagination."
-      keywords="text to pdf, txt to pdf, convert text to pdf, plain text pdf converter, paste text make pdf"
+      title="Text to PDF Converter Online Free – Plain Text to PDF on Any Device | Master PDF Tools"
+      description="Convert plain text and notes to a formatted PDF online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Text to PDF Online Free, TXT to PDF Converter, Text to PDF for All Devices, Mobile Text to PDF, text to pdf, txt to pdf, convert text to pdf, plain text pdf converter, paste text make pdf"
       h1="Text to PDF Converter"
       intro="Paste any text and instantly convert it into a clean, paginated PDF document — wrapped, formatted, and ready to share."
       faqSchema={faqs}

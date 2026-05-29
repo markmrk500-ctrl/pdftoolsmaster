@@ -72,9 +72,9 @@ const UnlockPdf = () => {
 
   return (
     <ToolPageShell
-      title="Unlock PDF Online — Remove PDF Restrictions Free | PDFMaster Tools"
-      description="Remove PDF owner password and restrictions online for free. Unlock printing, copying, and editing limits in your browser — secure, no upload, no signup."
-      keywords="unlock pdf, remove pdf password, remove pdf restrictions, pdf unlocker, decrypt pdf, unlock pdf online free"
+      title="Unlock PDF Online Free – Remove PDF Password on Any Device | Master PDF Tools"
+      description="Unlock password-protected PDFs and remove restrictions online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Unlock PDF Online Free, Remove PDF Password, PDF Unlocker for All Devices, Mobile PDF Unlocker, Cross-platform PDF Unlock, unlock pdf, remove pdf password, remove pdf restrictions, pdf unlocker, decrypt pdf, unlock pdf online free"
       h1="Unlock PDF Restrictions Online"
       intro="Remove owner restrictions on your PDF so you can print, copy text, and edit freely — all in your browser."
       faqSchema={faqs}

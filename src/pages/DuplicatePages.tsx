@@ -71,9 +71,9 @@ const DuplicatePages = () => {
 
   return (
     <ToolPageShell
-      title="Duplicate PDF Pages — Copy Pages Within a PDF Online Free | PDFMaster"
-      description="Duplicate selected PDF pages in place. Specify any pages and copy count. Free, fast, and 100% private — runs in your browser."
-      keywords="duplicate pdf pages, copy pdf pages, repeat pdf page, clone pdf pages"
+      title="Duplicate PDF Pages Online Free – Copy Pages Within PDF on Any Device | Master PDF Tools"
+      description="Duplicate and clone pages within any PDF online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Duplicate PDF Pages Online Free, Copy PDF Pages, PDF Page Duplicator for All Devices, Mobile PDF Duplicate, duplicate pdf pages, copy pdf pages, repeat pdf page, clone pdf pages"
       h1="Duplicate PDF Pages"
       intro="Pick which pages to duplicate and how many copies to make. The duplicates are inserted right after each original page."
       faqSchema={faqs}
