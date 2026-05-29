@@ -81,9 +81,9 @@ const PageNumbers = () => {
 
   return (
     <ToolPageShell
-      title="Add Page Numbers to PDF Online — Free Page Numbering | PDFMaster Tools"
-      description="Add page numbers to PDF files online for free. Choose position (top/bottom, left/center/right) and download instantly. Browser-based, private, no signup."
-      keywords="add page numbers to pdf, pdf page numbers, number pdf pages, pdf pagination, page numbering pdf"
+      title="Add Page Numbers to PDF Online Free – Works on Any Device | Master PDF Tools"
+      description="Add page numbers to any PDF online. Mobile-friendly, cross-browser, secure, and compatible with all devices, operating systems, and software versions."
+      keywords="Add Page Numbers to PDF, PDF Page Numbering Free, Page Numbers for All Devices, Mobile PDF Page Numbers, add page numbers to pdf, pdf page numbers, number pdf pages, pdf pagination, page numbering pdf"
       h1="Add Page Numbers to PDF — Free Online Tool"
       intro="Number every page of your PDF in the position you choose — top or bottom, left, center, or right."
       faqSchema={faqs}

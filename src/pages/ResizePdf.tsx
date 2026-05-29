@@ -73,9 +73,9 @@ const ResizePdf = () => {
 
   return (
     <ToolPageShell
-      title="Resize PDF Online — Change PDF Page Size to A4, Letter, Legal | PDFMaster Tools"
-      description="Resize PDF pages to A4, Letter, Legal, A3, A5, or Tabloid online for free. Choose portrait or landscape. Browser-based and secure."
-      keywords="resize pdf, change pdf page size, pdf to a4, pdf to letter, pdf page resizer, scale pdf"
+      title="Resize PDF Online Free – Change Page Size to A4, Letter, Legal on Any Device | Master PDF Tools"
+      description="Resize PDF pages to A4, Letter, Legal, or custom sizes online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Resize PDF Online Free, Change PDF Page Size, PDF Resizer for All Devices, Mobile PDF Resize, resize pdf, change pdf page size, pdf to a4, pdf to letter, pdf page resizer, scale pdf"
       h1="Resize PDF Page Size — Free Online"
       intro="Standardize your PDFs by converting them to A4, Letter, Legal, A3, A5, or Tabloid in portrait or landscape."
       faqSchema={faqs}

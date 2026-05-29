@@ -94,9 +94,9 @@ const MarkdownToPdf = () => {
 
   return (
     <ToolPageShell
-      title="Markdown to PDF Converter — Render .md to PDF Online Free | PDFMaster"
-      description="Convert Markdown text to a styled PDF in your browser. Supports headings, lists, code blocks, links, blockquotes. Free and private."
-      keywords="markdown to pdf, md to pdf, convert markdown pdf, markdown converter, render md as pdf"
+      title="Markdown to PDF Converter Online Free – Render .md on Any Device | Master PDF Tools"
+      description="Convert Markdown files to beautifully rendered PDFs online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Markdown to PDF Online Free, MD to PDF Converter, Markdown to PDF for All Devices, Mobile Markdown to PDF, markdown to pdf, md to pdf, convert markdown pdf, markdown converter, render md as pdf"
       h1="Markdown to PDF Converter"
       intro="Paste your Markdown and convert it to a beautifully styled PDF using your browser's native print engine — fast, offline, and free."
       faqSchema={faqs}

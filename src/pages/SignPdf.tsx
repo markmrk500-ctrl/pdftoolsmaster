@@ -126,9 +126,9 @@ const SignPdf = () => {
 
   return (
     <ToolPageShell
-      title="Sign PDF Online — Add Signature to PDF Free | PDFMaster Tools"
-      description="Draw your signature and add it to a PDF online for free. Browser-based e-signing — no upload, no signup, no watermark."
-      keywords="sign pdf, e-signature pdf, pdf signature, electronic signature, sign pdf online free, draw signature pdf"
+      title="Sign PDF Online Free – Add eSignature to PDF on Any Device | Master PDF Tools"
+      description="Add typed or drawn signatures to PDF online with full positioning control. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Sign PDF Online Free, eSignature PDF, PDF Signature Tool for All Devices, Mobile PDF Signature, Cross-platform PDF Sign, sign pdf, e-signature pdf, pdf signature, electronic signature, sign pdf online free, draw signature pdf"
       h1="Sign a PDF Online — Free E-Signature Tool"
       intro="Draw your signature and stamp it onto any page of your PDF — fully in your browser, no account required."
       faqSchema={faqs}

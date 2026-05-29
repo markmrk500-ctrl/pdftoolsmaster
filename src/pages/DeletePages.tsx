@@ -114,9 +114,9 @@ const DeletePages = () => {
 
   return (
     <ToolPageShell
-      title="Delete PDF Pages Online — Remove Pages from PDF Free | PDFMaster Tools"
-      description="Delete unwanted pages from a PDF online for free. Specify single pages or ranges to remove. Browser-based, secure, no signup or watermark."
-      keywords="delete pdf pages, remove pdf pages, pdf page remover, trim pdf, delete pages from pdf"
+      title="Delete PDF Pages Online Free – Remove Pages on Any Device | Master PDF Tools"
+      description="Delete unwanted pages from any PDF online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Delete PDF Pages Online Free, Remove PDF Pages, PDF Page Remover for All Devices, Mobile PDF Page Delete, delete pdf pages, remove pdf pages, pdf page remover, trim pdf, delete pages from pdf"
       h1="Delete Pages from PDF Online"
       intro="Remove specific pages from your PDF using simple range syntax and download the trimmed file instantly."
       faqSchema={faqs}

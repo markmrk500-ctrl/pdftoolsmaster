@@ -103,9 +103,9 @@ const MergePdf = () => {
 
   return (
     <ToolPageShell
-      title="Merge PDF Online — Combine PDF Files Free | PDFMaster Tools"
-      description="Merge PDF files online for free. Combine multiple PDFs into one document in seconds. Drag, drop, reorder, and download — secure, fast, no signup."
-      keywords="merge pdf, combine pdf, join pdf, pdf merger, merge pdf online free, combine pdf files, pdf joiner"
+      title="Merge PDF Online Free – Combine PDF Files on Any Device | Master PDF Tools"
+      description="Merge and combine PDF files online with one tool. Mobile-friendly, cross-browser, secure, and compatible with all devices, operating systems, and software versions."
+      keywords="Merge PDF Online Free, Combine PDF Files, PDF Merger for All Devices, Mobile PDF Merger, Cross-platform PDF Merge, Fast Secure PDF Combine, merge pdf, combine pdf, join pdf, pdf merger, merge pdf online free, combine pdf files, pdf joiner"
       h1="Merge PDF Files Online — Free PDF Combiner"
       intro="Combine multiple PDFs into a single document. Drag, drop, reorder, and merge — all in your browser, with full privacy and zero uploads."
       faqSchema={faqs}

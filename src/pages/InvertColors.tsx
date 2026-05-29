@@ -69,9 +69,9 @@ const InvertColors = () => {
 
   return (
     <ToolPageShell
-      title="Invert PDF Colors — Dark Mode PDF Converter Online Free | PDFMaster"
-      description="Invert every color in a PDF. White becomes black, black becomes white. Perfect for dark-mode reading and printing on dark paper. Free and browser-based."
-      keywords="invert pdf colors, dark mode pdf, negative pdf, white to black pdf, pdf color inversion"
+      title="Invert PDF Colors Online Free – Dark Mode PDF on Any Device | Master PDF Tools"
+      description="Invert PDF colors to create dark-mode and night-friendly PDFs online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Invert PDF Colors Online Free, Dark Mode PDF Converter, PDF Color Invert for All Devices, Mobile PDF Invert, invert pdf colors, dark mode pdf, negative pdf, white to black pdf, pdf color inversion"
       h1="Invert PDF Colors"
       intro="Invert every color in your PDF — turn bright white pages into dark mode-friendly black backgrounds for late-night reading."
       faqSchema={faqs}

@@ -68,9 +68,9 @@ const HeaderFooter = () => {
 
   return (
     <ToolPageShell
-      title="Add Header and Footer to PDF Online — Free | PDFMaster Tools"
-      description="Add custom header and footer text to every page of a PDF online. Free, browser-based, no signup, instant download."
-      keywords="add header to pdf, add footer to pdf, pdf header footer, page header pdf, document footer"
+      title="Add Header and Footer to PDF Online Free – Works on Any Device | Master PDF Tools"
+      description="Add custom headers and footers to PDF pages online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Add Header Footer to PDF Online Free, PDF Header Footer Tool for All Devices, Mobile PDF Header Footer, add header to pdf, add footer to pdf, pdf header footer, page header pdf, document footer"
       h1="Add Header & Footer to PDF"
       intro="Stamp a custom header and footer on every page of your document — perfect for branded reports, drafts, and confidential documents."
       faqSchema={faqs}

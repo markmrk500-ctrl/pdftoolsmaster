@@ -120,9 +120,9 @@ const SplitPdf = () => {
 
   return (
     <ToolPageShell
-      title="Split PDF Online — Extract PDF Pages Free | PDFMaster Tools"
-      description="Split PDF files online for free. Extract specific pages, divide a PDF into multiple documents, or separate chapters using flexible page ranges. Browser-based and secure."
-      keywords="split pdf, extract pdf pages, divide pdf, pdf splitter, separate pdf pages, split pdf online free"
+      title="Split PDF Online Free – Extract PDF Pages on Any Device | Master PDF Tools"
+      description="Split PDFs and extract pages online. Mobile-friendly, cross-browser, secure, and compatible with all devices, operating systems, and software versions."
+      keywords="Split PDF Online Free, Extract PDF Pages, PDF Splitter for All Devices, Mobile PDF Splitter, Cross-platform PDF Split, split pdf, extract pdf pages, divide pdf, pdf splitter, separate pdf pages, split pdf online free"
       h1="Split PDF Files Online — Extract Pages from PDF"
       intro="Extract specific pages or split a PDF into multiple files using flexible page ranges. Fast, free, browser-based."
       faqSchema={faqs}

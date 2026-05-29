@@ -137,9 +137,9 @@ const CsvToPdf = () => {
 
   return (
     <ToolPageShell
-      title="CSV to PDF Converter Online — Convert Spreadsheet to PDF Free | PDFMaster"
-      description="Convert CSV spreadsheet files to a clean PDF table online for free. Auto-paginated, browser-based, no signup."
-      keywords="csv to pdf, convert csv to pdf, spreadsheet to pdf, csv table pdf, csv converter"
+      title="CSV to PDF Converter Online Free – Spreadsheet to PDF on Any Device | Master PDF Tools"
+      description="Convert CSV spreadsheets to clean PDF tables online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="CSV to PDF Online Free, Spreadsheet to PDF Converter, CSV to PDF for All Devices, Mobile CSV to PDF, csv to pdf, convert csv to pdf, spreadsheet to pdf, csv table pdf, csv converter"
       h1="CSV to PDF — Convert Spreadsheets into Printable Tables"
       intro="Upload a CSV file and download a paginated PDF table — header row styled, columns auto-sized, ready to share or print."
       faqSchema={faqs}

@@ -48,9 +48,9 @@ const RepairPdf = () => {
 
   return (
     <ToolPageShell
-      title="Repair PDF Online — Fix Corrupted PDF Files Free | PDFMaster Tools"
-      description="Repair damaged or corrupted PDF files online for free. Rebuilds the file structure in your browser. Secure, no signup, no upload."
-      keywords="repair pdf, fix pdf, recover pdf, corrupted pdf repair, pdf fix tool, restore pdf"
+      title="Repair PDF Online Free – Fix Corrupted PDF Files on Any Device | Master PDF Tools"
+      description="Repair damaged and corrupted PDF files online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Repair PDF Online Free, Fix Corrupted PDF, PDF Repair Tool for All Devices, Mobile PDF Repair, repair pdf, fix pdf, recover pdf, corrupted pdf repair, pdf fix tool, restore pdf"
       h1="Repair PDF — Fix Corrupted Files Free"
       intro="Rebuild the internal structure of broken PDFs so they open cleanly again. Runs entirely in your browser."
       faqSchema={faqs}

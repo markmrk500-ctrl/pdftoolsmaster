@@ -80,9 +80,9 @@ const ResizePdfNup = () => {
 
   return (
     <ToolPageShell
-      title="N-up PDF Online — Multiple Pages Per Sheet (2-up, 4-up) | PDFMaster Tools"
-      description="Combine 2 or 4 PDF pages onto a single sheet online for free. Save paper, print handouts and booklets. Browser-based, secure, no signup."
-      keywords="n-up pdf, multiple pages per sheet, 2 pages per sheet, 4 pages per sheet, pdf booklet, pdf handout"
+      title="N-up PDF Online Free – Multiple Pages Per Sheet on Any Device | Master PDF Tools"
+      description="Combine multiple PDF pages onto one sheet (2-up, 4-up, 6-up). Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="N-up PDF Online Free, Multiple Pages Per Sheet, PDF 2-up 4-up for All Devices, Mobile N-up PDF, n-up pdf, multiple pages per sheet, 2 pages per sheet, 4 pages per sheet, pdf booklet, pdf handout"
       h1="Multiple PDF Pages Per Sheet (N-up)"
       intro="Place 2 or 4 original PDF pages onto each output sheet. Perfect for handouts, study notes, and saving paper."
       faqSchema={faqs}

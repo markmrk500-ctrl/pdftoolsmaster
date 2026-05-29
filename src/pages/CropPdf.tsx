@@ -70,9 +70,9 @@ const CropPdf = () => {
 
   return (
     <ToolPageShell
-      title="Crop PDF Online — Trim PDF Margins Free | PDFMaster Tools"
-      description="Crop PDF pages by removing equal margins from every side. Free, browser-based, and secure — no upload, no signup."
-      keywords="crop pdf, trim pdf, pdf cropper, remove pdf margins, cut pdf pages, crop pdf online free"
+      title="Crop PDF Online Free – Trim PDF Margins on Any Device | Master PDF Tools"
+      description="Crop and trim PDF margins online with pixel-perfect control. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Crop PDF Online Free, Trim PDF Margins, PDF Crop Tool for All Devices, Mobile PDF Crop, crop pdf, trim pdf, pdf cropper, remove pdf margins, cut pdf pages, crop pdf online free"
       h1="Crop PDF Margins Online"
       intro="Trim equal margins from every page of your PDF — perfect for cleaning up scans and removing unwanted whitespace."
       faqSchema={faqs}

@@ -68,9 +68,9 @@ const FlattenPdf = () => {
 
   return (
     <ToolPageShell
-      title="Flatten PDF Online — Lock Forms & Annotations Free | PDFMaster"
-      description="Flatten PDF forms, signatures, and annotations into static content online for free. Browser-based, private, no signup."
-      keywords="flatten pdf, flatten pdf form, lock pdf, freeze pdf, flatten signature pdf, non-editable pdf"
+      title="Flatten PDF Online Free – Lock Forms & Annotations on Any Device | Master PDF Tools"
+      description="Flatten PDF forms, fields, and annotations into static content online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Flatten PDF Online Free, Lock PDF Forms, PDF Flatten Tool for All Devices, Mobile PDF Flatten, flatten pdf, flatten pdf form, lock pdf, freeze pdf, flatten signature pdf, non-editable pdf"
       h1="Flatten PDF — Lock Forms, Annotations & Signatures"
       intro="Convert form fields, annotations, and editable layers into permanent page content. The output looks identical but cannot be modified."
       faqSchema={faqs}

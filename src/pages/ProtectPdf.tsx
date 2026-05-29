@@ -79,9 +79,9 @@ const ProtectPdf = () => {
 
   return (
     <ToolPageShell
-      title="Protect PDF Online — Add Password to PDF Free | PDFMaster Tools"
-      description="Add a password to your PDF online for free. Browser-based encryption keeps your file private — your PDF never leaves your device."
-      keywords="protect pdf, password protect pdf, encrypt pdf, secure pdf, add password to pdf, pdf password, lock pdf"
+      title="Protect PDF Online Free – Add Password to PDF on Any Device | Master PDF Tools"
+      description="Password-protect PDFs online with strong AES encryption. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="Protect PDF Online Free, Password Protect PDF, Encrypt PDF for All Devices, Mobile PDF Encryption, Cross-platform PDF Security, protect pdf, password protect pdf, encrypt pdf, secure pdf, add password to pdf, pdf password, lock pdf"
       h1="Password-Protect Your PDF Online"
       intro="Add a password to your PDF so only people you share it with can open it. All processing happens in your browser."
       faqSchema={faqs}

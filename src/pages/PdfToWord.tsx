@@ -105,9 +105,9 @@ const PdfToWord = () => {
 
   return (
     <ToolPageShell
-      title="PDF to Word Converter Online — Free PDF to DOCX | PDFMaster Tools"
-      description="Convert PDF to editable Word .docx file online for free. Extract text from any PDF in seconds — browser-based, secure, no signup or email required."
-      keywords="pdf to word, pdf to docx, convert pdf to word, pdf to word converter, pdf to word free, pdf editor"
+      title="PDF to Word Converter Online Free – Convert PDF to DOCX on Any Device | Master PDF Tools"
+      description="Convert PDF to editable Word DOCX online. Mobile-friendly, cross-browser, secure, and compatible with all devices, operating systems, and software versions."
+      keywords="PDF to Word Online Free, PDF to DOCX Converter, PDF to Word for All Devices, Mobile PDF to Word, Cross-platform PDF to DOCX, pdf to word, pdf to docx, convert pdf to word, pdf to word converter, pdf to word free, pdf editor"
       h1="PDF to Word Converter — Free Online PDF to DOCX"
       intro="Extract text from your PDF into an editable Microsoft Word (.docx) document. Open in Word, Google Docs, LibreOffice, or Pages."
       faqSchema={faqs}
