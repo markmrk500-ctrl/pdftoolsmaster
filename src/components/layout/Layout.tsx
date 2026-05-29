@@ -1,8 +1,10 @@
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { OfflineBanner } from "@/components/OfflineBanner";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => (
   <div className="min-h-screen flex flex-col">
+    <OfflineBanner />
     <Header />
     <main className="flex-1">{children}</main>
     <Footer />

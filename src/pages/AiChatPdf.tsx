@@ -214,11 +214,11 @@ const AiChatPdf = () => {
 
   return (
     <ToolPageShell
-      title="Chat with PDF — Ask Questions to Any PDF with AI | PDFMaster"
-      description="Upload any PDF and chat with it using AI. Get instant answers with page citations, markdown formatting, and conversational follow-ups. Free, no signup."
-      keywords="chat with pdf, ask pdf questions, pdf ai chat, talk to pdf, pdf assistant, ai pdf chatbot, pdf q&a"
-      h1="Chat with PDF"
-      intro="Upload a PDF and ask it anything. Get fast, markdown-formatted answers with page references — like ChatGPT, but grounded in your document."
+      title="Chat with PDF AI Online Free – Ask Questions on Any Device | Master PDF Tools"
+      description="Chat with any PDF using AI. Mobile-friendly, cross-browser, secure, and compatible with all devices, operating systems, and software versions."
+      keywords="Chat with PDF, AI PDF Chat, Ask PDF Questions, PDF AI Assistant, Talk to PDF, PDF Q&A AI, Mobile PDF Chat, PDF Chatbot for All Devices, cross-platform pdf chat"
+      h1="Chat with PDF — Works on Any Device"
+      intro="Upload a PDF and ask it anything. Fast, markdown answers with page citations — mobile-friendly, cross-browser, and works on every device."
       faqSchema={faqs}
       breadcrumbName="Chat with PDF"
       breadcrumbPath="/ai-chat-pdf"

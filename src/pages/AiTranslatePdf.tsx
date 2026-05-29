@@ -134,11 +134,11 @@ const AiTranslatePdf = () => {
 
   return (
     <ToolPageShell
-      title="AI PDF Translator — Translate PDFs Online Free in 20+ Languages | PDFMaster"
-      description="Translate any PDF into Spanish, French, German, Chinese, Arabic, Hindi & more with AI. Free, fast, no signup. Powered by advanced AI."
-      keywords="ai pdf translator, translate pdf online, pdf translation free, gemini pdf translate, translate pdf to spanish, pdf to french"
-      h1="AI PDF Translator"
-      intro="Upload a PDF, pick a language, and get an instant AI translation. Streams in real-time and exports as text or PDF."
+      title="AI PDF Translator Online Free – Translate Documents on Any Device | Master PDF Tools"
+      description="Translate PDF and documents online using AI. Fast, secure, mobile-friendly, and compatible with all devices, browsers, and software versions."
+      keywords="AI PDF Translator, Translate PDF Online Free, PDF Translator for All Devices, AI Document Translation, Translate Files Online, Multi-language PDF Translation, Mobile PDF Translator, Fast AI Translation Tool, cross-platform pdf translator, pdf translator iphone android"
+      h1="AI PDF Translator — Works on Any Device"
+      intro="Translate any PDF into 20+ languages with AI. Mobile-friendly, cross-browser, and compatible with all devices and software versions — fast, secure, free."
       faqSchema={faqs}
       breadcrumbName="AI PDF Translator"
       breadcrumbPath="/ai-translate-pdf"
