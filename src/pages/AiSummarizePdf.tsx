@@ -65,11 +65,11 @@ const AiSummarizePdf = () => {
 
   return (
     <ToolPageShell
-      title="AI PDF Summarizer — Free Online TL;DR & Key Points | PDFMaster"
-      description="Summarize any PDF instantly with AI. Get a TL;DR, key points, and section-by-section summary. Powered by our AI — no signup, no API key."
-      keywords="ai pdf summarizer, summarize pdf online, pdf tldr, pdf key points, ai document summary, gemini pdf summary"
-      h1="AI PDF Summarizer"
-      intro="Upload any PDF and get an instant AI-generated TL;DR, key takeaways, and section summaries — powered by our AI."
+      title="AI PDF Summarizer Online Free – Summarize Documents on Any Device | Master PDF Tools"
+      description="Summarize any PDF with AI in seconds. Mobile-friendly, cross-browser, secure, and compatible with all devices, operating systems, and software versions."
+      keywords="AI PDF Summarizer, Summarize PDF Online Free, PDF TLDR, AI Document Summary, Key Points Generator, Mobile PDF Summarizer, PDF Summarizer for All Devices, Fast AI Summary Tool, cross-platform summarizer"
+      h1="AI PDF Summarizer — Works on Any Device"
+      intro="Get an instant AI-generated TL;DR, key takeaways, and section summaries from any PDF. Mobile-friendly, cross-browser, and fast on every device."
       faqSchema={faqs}
       breadcrumbName="AI PDF Summarizer"
       breadcrumbPath="/ai-summarize-pdf"

@@ -205,11 +205,11 @@ const AiMcqGenerator = () => {
 
   return (
     <ToolPageShell
-      title="AI MCQ Generator — Create Quizzes from PDF, DOCX & Text | PDFMaster"
-      description="Generate 10–50 multiple-choice questions from any PDF, DOCX, TXT, or pasted text. Take the quiz, get instant scoring with correct answers and explanations."
-      keywords="ai mcq generator, quiz from pdf, generate questions from document, ai quiz maker, mcq from text, study quiz generator"
-      h1="AI MCQ Generator"
-      intro="Turn any PDF, DOCX, TXT, or block of text into a randomized multiple-choice quiz — answer it, submit, and get instant scoring with explanations."
+      title="AI MCQ Generator Online Free – Create Quizzes from PDF on Any Device | Master PDF Tools"
+      description="Generate multiple-choice quizzes from PDF, DOCX, or text using AI. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
+      keywords="AI MCQ Generator, Quiz from PDF, AI Quiz Maker, MCQ Generator Online Free, Study Quiz Generator, Mobile Quiz Maker, MCQ Generator for All Devices, Subject-specific MCQ AI, cross-platform quiz tool"
+      h1="AI MCQ Generator — Works on Any Device"
+      intro="Turn any PDF, DOCX, TXT, or pasted text into a subject-specific multiple-choice quiz with instant scoring. Mobile-friendly and cross-browser on every device."
       faqSchema={faqs}
       breadcrumbName="AI MCQ Generator"
       breadcrumbPath="/ai-mcq-generator"

@@ -74,11 +74,11 @@ const AiOcrPdf = () => {
 
   return (
     <ToolPageShell
-      title="AI OCR for Scanned PDFs — Extract Text from Images Free | PDFMaster"
-      description="Turn scanned PDFs into editable text using AI vision OCR. Reads handwriting, low-quality scans & 100+ languages. Powered by advanced AI. Free, no signup."
-      keywords="ai ocr pdf, scanned pdf to text, pdf ocr online, image pdf to text, gemini ocr, vision ocr pdf, handwriting pdf to text"
-      h1="AI OCR — Scanned PDF to Text"
-      intro="Upload a scanned or image-based PDF and let AI vision extract every word — including handwriting and 100+ languages."
+      title="AI OCR PDF Online Free – Scanned PDF to Text on Any Device | Master PDF Tools"
+      description="Extract text from scanned PDFs using AI OCR. Mobile-friendly, cross-browser, secure, and compatible with all devices, operating systems, and software versions."
+      keywords="AI OCR PDF, Scanned PDF to Text, OCR PDF Online Free, AI Image to Text, Handwriting OCR, Multi-language OCR, Mobile OCR Tool, PDF OCR for All Devices, cross-platform ocr, fast secure ai ocr"
+      h1="AI OCR — Scanned PDF to Text on Any Device"
+      intro="Turn scanned and image-based PDFs into editable text with AI vision. Works on mobile, tablet, laptop, and desktop — all browsers and software versions."
       faqSchema={faqs}
       breadcrumbName="AI OCR PDF"
       breadcrumbPath="/ai-ocr-pdf"
