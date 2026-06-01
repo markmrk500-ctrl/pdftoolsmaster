@@ -54,6 +54,8 @@ import {
   MessageSquare,
   ListChecks,
 } from "lucide-react";
+import { FavoriteButton } from "@/components/FavoriteButton";
+import { useFavorites } from "@/hooks/useFavorites";
 
 type Tool = { to: string; icon: any; title: string; description: string; color: string };
 
@@ -211,6 +213,8 @@ const Index = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { favorites, isSignedIn } = useFavorites();
+  const favoriteTools = tools.filter((t) => favorites.has(t.to));
 
   const q = query.trim().toLowerCase();
 
@@ -441,11 +445,14 @@ const Index = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
                   {cat.tools.map((t) => (
                     <Link key={t.to} to={t.to} className="tool-card group block relative" aria-label={`${t.title} — ${t.description}`}>
-                      {t.isNew && (
-                        <span className="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider bg-primary text-primary-foreground px-2 py-0.5 rounded-full">
-                          New
-                        </span>
-                      )}
+                      <div className="absolute top-3 right-3 flex items-center gap-2">
+                        {t.isNew && (
+                          <span className="text-[10px] font-bold uppercase tracking-wider bg-primary text-primary-foreground px-2 py-0.5 rounded-full">
+                            New
+                          </span>
+                        )}
+                        <FavoriteButton toolPath={t.to} />
+                      </div>
                       <div
                         className="h-12 w-12 rounded-xl flex items-center justify-center mb-4 text-white shadow-sm"
                         style={{ backgroundColor: `hsl(var(--${t.color}))` }}
