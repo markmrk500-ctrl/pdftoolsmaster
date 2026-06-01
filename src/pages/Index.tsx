@@ -429,6 +429,62 @@ const Index = () => {
           </div>
         )}
 
+        {!q && isSignedIn && favoriteTools.length > 0 && (
+          <div id="favorites" className="mb-10 scroll-mt-32">
+            <div className="flex items-end justify-between gap-4 mb-5 border-b border-border pb-3">
+              <div>
+                <h3 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-primary fill-current" /> Your Favorite Tools
+                </h3>
+                <p className="text-sm text-muted-foreground mt-1">Quick access to the tools you saved.</p>
+              </div>
+              <span className="text-xs font-medium text-muted-foreground shrink-0">
+                {favoriteTools.length} saved
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
+              {favoriteTools.map((t) => (
+                <Link key={t.to} to={t.to} className="tool-card group block relative" aria-label={`${t.title} — ${t.description}`}>
+                  <div className="absolute top-3 right-3">
+                    <FavoriteButton toolPath={t.to} />
+                  </div>
+                  <div
+                    className="h-12 w-12 rounded-xl flex items-center justify-center mb-4 text-white shadow-sm"
+                    style={{ backgroundColor: `hsl(var(--${t.color}))` }}
+                    aria-hidden="true"
+                  >
+                    <t.icon className="h-6 w-6" />
+                  </div>
+                  <h4 className="text-lg font-semibold mb-2">{t.title}</h4>
+                  <p className="text-sm text-muted-foreground mb-4">{t.description}</p>
+                  <span className="inline-flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
+                    Open <ArrowRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!q && !isSignedIn && (
+          <div className="mb-10 rounded-2xl border border-primary/30 bg-accent/50 p-6 flex flex-col md:flex-row items-start md:items-center gap-4 justify-between">
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shrink-0">
+                <Heart className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Save your favorite tools</h3>
+                <p className="text-sm text-muted-foreground">
+                  Create a free account to bookmark tools and access them quickly on any device.
+                </p>
+              </div>
+            </div>
+            <Button asChild>
+              <Link to="/auth">Sign Up Free</Link>
+            </Button>
+          </div>
+        )}
+
         <div className="space-y-14">
           {filteredCategories.length > 0 ? (
             filteredCategories.map((cat) => (
