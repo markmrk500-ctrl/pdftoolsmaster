@@ -551,11 +551,11 @@ const ResultsView = ({
     <div className="space-y-6">
       <div className={cn(
         "rounded-2xl border p-6 text-center",
-        passed ? "border-primary/40 bg-accent" : "border-destructive/30 bg-destructive/5"
+        passed ? "border-success/40 bg-success/10" : "border-destructive/30 bg-destructive/5"
       )}>
         <p className="text-sm text-muted-foreground">Your score</p>
         <p className="text-4xl font-bold mt-1">{score} / {questions.length}</p>
-        <p className={cn("text-2xl font-semibold mt-1", passed ? "text-primary" : "text-destructive")}>
+        <p className={cn("text-2xl font-semibold mt-1", passed ? "text-success" : "text-destructive")}>
           {pct}%
         </p>
       </div>
@@ -569,7 +569,7 @@ const ResultsView = ({
               <div className="flex items-start gap-3 mb-3">
                 <div className={cn(
                   "h-7 w-7 shrink-0 rounded-full flex items-center justify-center",
-                  isCorrect ? "bg-primary/15 text-primary" : "bg-destructive/15 text-destructive"
+                  isCorrect ? "bg-success/15 text-success" : "bg-destructive/15 text-destructive"
                 )}>
                   {isCorrect ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
                 </div>
@@ -587,21 +587,21 @@ const ResultsView = ({
                       key={oi}
                       className={cn(
                         "rounded-lg border px-3 py-2 text-sm flex items-start gap-2",
-                        isRight && "border-primary bg-primary/10",
+                        isRight && "border-success bg-success/10 text-success-foreground",
                         !isRight && isUserPick && "border-destructive bg-destructive/10",
                         !isRight && !isUserPick && "border-border"
                       )}
                     >
-                      <span className="font-semibold w-5">{String.fromCharCode(65 + oi)}.</span>
-                      <span className="flex-1">{opt}</span>
-                      {isRight && <Check className="h-4 w-4 text-primary shrink-0" />}
+                      <span className={cn("font-semibold w-5", isRight && "text-success")}>{String.fromCharCode(65 + oi)}.</span>
+                      <span className={cn("flex-1", isRight && "text-success font-medium")}>{opt}</span>
+                      {isRight && <Check className="h-4 w-4 text-success shrink-0" />}
                       {!isRight && isUserPick && <X className="h-4 w-4 text-destructive shrink-0" />}
                     </div>
                   );
                 })}
               </div>
               {q.explanation && (
-                <div className="mt-3 ml-10 text-sm text-muted-foreground border-l-2 border-primary/40 pl-3">
+                <div className="mt-3 ml-10 text-sm text-muted-foreground border-l-2 border-success/40 pl-3">
                   <span className="font-medium text-foreground">Explanation: </span>{q.explanation}
                 </div>
               )}

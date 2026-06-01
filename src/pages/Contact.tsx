@@ -30,9 +30,9 @@ const Contact = () => {
     }
     setSubmitting(true);
     // Without a backend we open the user's mail client
-    const subject = encodeURIComponent(`PDFMaster Contact — ${form.name}`);
+    const subject = encodeURIComponent(`Master PDF Tools Contact — ${form.name}`);
     const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`);
-    window.location.href = `mailto:hello@pdfmaster.tools?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:masterpdftools@gmail.com?subject=${subject}&body=${body}`;
     setTimeout(() => {
       setSubmitting(false);
       toast({ title: "Email client opened", description: "Send the prepared message to reach us." });
@@ -41,13 +41,14 @@ const Contact = () => {
 
   return (
     <StaticPage
-      title="Contact PDFMaster Tools — Get in Touch"
-      description="Contact PDFMaster Tools with feedback, feature requests, or support questions."
+      title="Contact Master PDF Tools — Get in Touch"
+      description="Contact Master PDF Tools with feedback, feature requests, or support questions. Email masterpdftools@gmail.com."
     >
       <h1>Contact Us</h1>
       <p>
         Have a question, feature request, or feedback? Send us a message and we'll get
-        back to you as soon as possible.
+        back to you as soon as possible. You can also email us directly at{" "}
+        <a href="mailto:masterpdftools@gmail.com">masterpdftools@gmail.com</a>.
       </p>
 
       <form onSubmit={onSubmit} className="not-prose space-y-4 mt-6">
