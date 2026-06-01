@@ -51,7 +51,9 @@ import About from "./pages/About.tsx";
 import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
 import Contact from "./pages/Contact.tsx";
+import Auth from "./pages/Auth.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { AuthProvider } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
 
@@ -62,7 +64,8 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <ScrollToTop />
+          <AuthProvider>
+            <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/merge-pdf" element={<MergePdf />} />
