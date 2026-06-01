@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { FileText, Menu, X, ChevronDown } from "lucide-react";
+import { FileText, Menu, X, ChevronDown, Heart, LogOut, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,7 +7,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
 
 const primaryTools = [
   { to: "/merge-pdf", label: "Merge PDF" },
@@ -144,10 +147,8 @@ export const Header = () => {
           </DropdownMenu>
         </nav>
 
-        <div className="hidden md:block">
-          <Button asChild variant="default" size="sm">
-            <Link to="/merge-pdf">Get Started</Link>
-          </Button>
+        <div className="hidden md:flex items-center gap-2">
+          <UserMenu />
         </div>
 
         <button
@@ -177,9 +178,72 @@ export const Header = () => {
                 {t.label}
               </NavLink>
             ))}
+            <div className="pt-2 mt-2 border-t border-border">
+              <MobileUserMenu onNavigate={() => setOpen(false)} />
+            </div>
           </nav>
         </div>
       )}
     </header>
+  );
+};
+
+const UserMenu = () => {
+  const { user, signOut, loading } = useAuth();
+  if (loading) return null;
+  if (!user) {
+    return (
+      <Button asChild variant="default" size="sm">
+        <Link to="/auth">
+          <Heart className="h-4 w-4" /> Sign In
+        </Link>
+      </Button>
+    );
+  }
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm">
+          <UserIcon className="h-4 w-4" />
+          <span className="max-w-[140px] truncate">{user.email}</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => signOut()} className="text-destructive cursor-pointer">
+          <LogOut className="h-4 w-4 mr-2" /> Sign Out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+const MobileUserMenu = ({ onNavigate }: { onNavigate: () => void }) => {
+  const { user, signOut } = useAuth();
+  if (!user) {
+    return (
+      <Link
+        to="/auth"
+        onClick={onNavigate}
+        className="px-3 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground inline-flex items-center gap-2"
+      >
+        <Heart className="h-4 w-4" /> Sign In to Save Favorites
+      </Link>
+    );
+  }
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="px-3 py-1 text-xs text-muted-foreground truncate">{user.email}</span>
+      <button
+        onClick={() => {
+          signOut();
+          onNavigate();
+        }}
+        className="px-3 py-2 text-sm font-medium rounded-md text-destructive text-left inline-flex items-center gap-2"
+      >
+        <LogOut className="h-4 w-4" /> Sign Out
+      </button>
+    </div>
   );
 };
