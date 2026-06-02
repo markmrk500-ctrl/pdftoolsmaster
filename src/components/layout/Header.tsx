@@ -28,6 +28,7 @@ const categoryGroups: { name: string; tools: { to: string; label: string }[] }[]
       { to: "/ai-translate-pdf", label: "AI Translate PDF" },
       { to: "/ai-ocr-pdf", label: "AI OCR (Scanned PDF)" },
       { to: "/ai-mcq-generator", label: "AI MCQ Generator" },
+      { to: "/ai-humanizer", label: "AI Humanizer" },
     ],
   },
   {
