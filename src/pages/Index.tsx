@@ -53,6 +53,7 @@ import {
   ScanText,
   MessageSquare,
   ListChecks,
+  Wand2,
 } from "lucide-react";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { useFavorites } from "@/hooks/useFavorites";
@@ -70,6 +71,7 @@ const categories: { id: string; name: string; description: string; tools: (Tool 
       { to: "/ai-summarize-pdf", icon: Sparkles, title: "AI PDF Summarizer", description: "Get a TL;DR, key points & section summaries instantly.", color: "tool-split", isNew: true },
       { to: "/ai-translate-pdf", icon: Languages, title: "AI PDF Translator", description: "Translate any PDF into 20+ languages with AI.", color: "tool-compress", isNew: true },
       { to: "/ai-ocr-pdf", icon: ScanText, title: "AI OCR (Scanned PDF)", description: "Extract text from scans & handwriting using AI vision.", color: "tool-merge", isNew: true },
+      { to: "/ai-humanizer", icon: Wand2, title: "AI Humanizer", description: "Turn ChatGPT, Gemini & Claude text into natural human writing.", color: "tool-convert", isNew: true },
     ],
   },
   {
