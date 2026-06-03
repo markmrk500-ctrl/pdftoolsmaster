@@ -130,3 +130,39 @@
   }
   .toolbar-scroll > * { scroll-snap-align: start; flex: 0 0 auto; }
 }
+
+/* ============================================================
+   Density modes — user-selectable interface chunkiness.
+   data-density on <html>: "normal" (default) | "compact" | "sleek"
+   ============================================================ */
+@layer utilities {
+  html[data-density="compact"] .tool-card { padding: 1rem; border-radius: 0.875rem; }
+  html[data-density="sleek"]   .tool-card { padding: 0.75rem; border-radius: 0.625rem; }
+
+  html[data-density="compact"] .tool-card:hover { transform: translateY(-1px); }
+  html[data-density="sleek"]   .tool-card:hover { transform: none; }
+
+  /* Tighten vertical rhythm of section paddings */
+  html[data-density="compact"] .py-12 { padding-top: 2rem; padding-bottom: 2rem; }
+  html[data-density="compact"] .py-16 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+  html[data-density="compact"] .py-20 { padding-top: 3rem; padding-bottom: 3rem; }
+  html[data-density="compact"] .py-10 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  html[data-density="compact"] .py-14 { padding-top: 2rem; padding-bottom: 2rem; }
+  html[data-density="compact"] .mt-20 { margin-top: 3rem; }
+
+  html[data-density="sleek"] .py-12 { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+  html[data-density="sleek"] .py-16 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  html[data-density="sleek"] .py-20 { padding-top: 1.75rem; padding-bottom: 1.75rem; }
+  html[data-density="sleek"] .py-10 { padding-top: 1rem; padding-bottom: 1rem; }
+  html[data-density="sleek"] .py-14 { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+  html[data-density="sleek"] .mt-20 { margin-top: 2rem; }
+
+  /* Slightly smaller hero text */
+  html[data-density="sleek"] h1.text-5xl,
+  html[data-density="sleek"] h1.text-4xl { font-size: 1.875rem; line-height: 2.25rem; }
+  html[data-density="compact"] h1.text-5xl { font-size: 2.25rem; line-height: 2.5rem; }
+
+  /* Header */
+  html[data-density="sleek"] header .h-16 { height: 3rem; }
+  html[data-density="compact"] header .h-16 { height: 3.5rem; }
+}
