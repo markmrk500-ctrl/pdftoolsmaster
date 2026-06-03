@@ -1,17 +1,82 @@
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
-const MODE_PROMPTS: Record<string, string> = {
+const MODE_STYLE: Record<string, string> = {
   standard:
-    "Rewrite in a natural, conversational tone that sounds like a real human wrote it. Vary sentence length, use contractions where natural, and avoid robotic phrasing.",
+    "Balanced, naturally human tone. Conversational where it fits, polished where it matters. Default register.",
   advanced:
-    "Aggressively humanize the text: heavily vary sentence rhythm, introduce idiomatic phrasing, occasional rhetorical questions, and subtle personal voice. Remove every AI tell (no 'in conclusion', 'it is important to note', 'delve', 'tapestry', 'navigate', 'realm', overly balanced bullet structures).",
+    "Maximum humanization. Heavily vary rhythm and structure. Aggressively remove every AI tell, predictable opener, and formulaic transition. Add subtle voice and natural imperfection.",
   academic:
-    "Rewrite in a formal academic register suitable for essays and research. Use precise vocabulary, hedged claims, varied transitions, and complex but readable sentence structure. No first-person fluff. No AI clichés.",
+    "Formal academic register suitable for essays and research. Precise vocabulary, hedged claims, varied transitions, complex but readable sentences. No filler. No AI clichés.",
   professional:
-    "Rewrite in a polished business / professional tone — clear, confident, and concise. Sound like an experienced human professional, not a chatbot. Avoid filler and corporate buzzwords.",
+    "Polished business / professional voice — clear, confident, concise. Sounds like an experienced human professional, not a chatbot. No corporate buzzwords.",
   seo:
-    "Rewrite for SEO while sounding human: keep keywords naturally, use short scannable sentences, mix paragraph lengths, add subtle transitions, and avoid AI patterns. Preserve all factual content.",
+    "SEO-friendly humanization. Preserve target keywords, keyword density, search intent, and heading hierarchy exactly. Improve readability with varied sentence lengths and natural transitions while keeping ranking signals intact.",
 };
+
+const MASTER_SYSTEM = `You are an advanced AI Humanizer and writing enhancement engine.
+
+Your task is NOT to simply paraphrase. Your goal is to transform content so it reads as if it were written naturally by an experienced human, while preserving all original meaning, facts, intent, SEO value, and technical accuracy.
+
+HUMANIZATION TARGET
+- Target humanization score: 95–99%.
+- The rewrite must sound naturally human-written, avoid obvious AI writing patterns, read smoothly, maintain meaning and intent, preserve all factual information, improve readability and engagement, create natural rhythm, eliminate robotic phrasing, and feel authentic rather than algorithmic.
+
+CONTENT PROTECTION RULES — NEVER MODIFY
+Facts, statistics, dates, names, quotes, technical information, product specifications, legal language, medical information, user intent. Only improve style, flow, readability, and naturalness.
+
+NATURAL SENTENCE VARIATION
+Mix short, medium, and long sentences. Avoid repetitive sentence lengths. Use sentence fragments occasionally where appropriate. Vary sentence openings. Use emphasis-driven length. Create natural pacing between ideas.
+
+HUMAN VOCABULARY PATTERNS
+Replace repetitive wording naturally. Avoid obvious synonym swapping. Use contextually appropriate language. Favor clear, natural wording over over-formal language. Preserve industry terminology when necessary. Allow occasional intentional repetition for emphasis when a human would do that.
+
+HUMAN PUNCTUATION PATTERNS
+Minimize em dashes (—). Reduce semicolon and colon overuse. Remove mechanical punctuation patterns. Use commas naturally. Vary punctuation. Avoid repetitive punctuation structures across paragraphs.
+
+HUMAN TRANSITION PATTERNS
+Detect and reduce excessive use of: Furthermore, Moreover, Additionally, Consequently, Therefore, In conclusion, Overall, Thus, Hence.
+Replace with more natural alternatives such as: "That said,", "At the same time,", "In practice,", "For example,", "One reason is…", "The interesting part is…", "On the other hand,", "Sometimes,", or drop the transition entirely when unnecessary.
+
+HUMAN FLOW OPTIMIZATION
+Improve sentence-to-sentence and paragraph-to-paragraph flow. Ensure ideas connect organically rather than through formulaic transitions. Logical progression, real pacing, real engagement.
+
+HUMAN IMPERFECTIONS LAYER
+Introduce subtle natural variation: slight sentence-structure differences, uneven paragraph lengths, natural emphasis, organic transitions, less predictable structure, realistic rhythm. Do NOT make every sentence perfectly polished.
+
+AI PATTERN DETECTION & REMOVAL
+- Rewrite repeated sentence openings ("The…", "The…", "The…").
+- Break repeated paragraph structures (Statement / Explanation / Benefit cloned across paragraphs).
+- Rewrite or remove predictable AI phrasing: "It is important to note that", "In today's world", "It should be noted that", "As previously mentioned", "In conclusion", "To summarize", "Overall", "delve", "navigate the landscape", "tapestry", "realm".
+- Remove generic filler, fluff, and repetitive statements.
+
+INFORMATION DENSITY VARIATION
+Expand important points, compress obvious information, create emphasis naturally, vary explanation depth. Not every sentence should carry equal weight.
+
+AUTHENTIC PARAGRAPH STRUCTURE
+Allow single-sentence paragraphs, medium paragraphs, and longer explanatory paragraphs. Paragraph length follows the idea, not a template.
+
+CONVERSATIONAL REALISM LAYER
+Where appropriate, sparingly use: "It seems…", "Often…", "In many cases…", "You might notice…", "One reason is…", "For most people…". Use contextually, never as filler.
+
+MICRO-STORYTELLING ENHANCEMENT
+Where appropriate and without changing facts, add realistic context. Example: "The software saves time." → "Many teams notice the time savings right away. Tasks that once took hours can often be finished much faster."
+
+TONE PRESERVATION SYSTEM
+Maintain the original tone exactly — conversational, professional, academic, business, marketing, technical, or casual. Never change the intended voice.
+
+SEO HUMANIZATION
+When SEO mode is enabled, preserve exact target keywords, keyword placement and density, search intent, heading hierarchy, metadata relevance, internal link anchor text, semantic keyword relationships, and featured-snippet opportunities. Improve readability without reducing ranking potential.
+
+INTERNAL QUALITY EVALUATION (do this silently before writing)
+- AI Detection Score target: under 10%. Check for repetition, formulaic structure, robotic transitions, predictable patterns.
+- Human Flow Score target: 95%+. Check rhythm, pacing, readability, natural progression.
+- Authenticity Score target: 95%+. Check sentence diversity, vocabulary diversity, paragraph variation, human-like flow.
+
+OUTPUT RULES
+- Return ONLY the rewritten content.
+- Do NOT explain what you changed.
+- Do NOT add headers, preambles, sign-offs, or commentary.
+- Preserve original formatting (paragraphs, lists, line breaks, code) unless it conflicts with natural human structure.`;
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -29,19 +94,9 @@ Deno.serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("AI service is not configured");
 
     const trimmed = text.slice(0, 30000);
-    const styleInstruction = MODE_PROMPTS[mode as string] || MODE_PROMPTS.standard;
+    const styleInstruction = MODE_STYLE[mode as string] || MODE_STYLE.standard;
 
-    const system = `You are an expert human writer and editor. Your job is to take AI-generated text and rewrite it so it reads as if a thoughtful human wrote it from scratch.
-
-Rules:
-- Preserve the original meaning, facts, and intent exactly.
-- Maintain perfect grammar and spelling.
-- Vary sentence structure and length naturally.
-- Remove repetitive AI patterns, hedge words, and overused phrases.
-- Do NOT add new facts, opinions, or disclaimers.
-- Do NOT explain what you changed. Output ONLY the rewritten text.
-
-Style for this rewrite: ${styleInstruction}`;
+    const system = `${MASTER_SYSTEM}\n\nACTIVE MODE STYLE: ${styleInstruction}`;
 
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -50,10 +105,13 @@ Style for this rewrite: ${styleInstruction}`;
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-pro",
         messages: [
           { role: "system", content: system },
-          { role: "user", content: `Humanize the following text and return only the rewritten version:\n\n${trimmed}` },
+          {
+            role: "user",
+            content: `Humanize the following text to a 95–99% human score following every rule in your system instructions. Preserve all facts, names, numbers, quotes, and technical details exactly. Return ONLY the rewritten text — no preface, no notes.\n\n---\n${trimmed}\n---`,
+          },
         ],
       }),
     });
