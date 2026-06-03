@@ -11,6 +11,7 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
+import { DensityToggle } from "@/components/DensityToggle";
 
 const primaryTools = [
   { to: "/merge-pdf", label: "Merge PDF" },
@@ -149,16 +150,23 @@ export const Header = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
+          <DensityToggle />
+          <Link to="/compare" className="px-3 py-2 text-sm font-medium text-foreground/70 hover:text-primary rounded-md">
+            Compare
+          </Link>
           <UserMenu />
         </div>
 
+        <div className="md:hidden flex items-center gap-1">
+          <DensityToggle />
         <button
-          className="md:hidden p-2"
+          className="p-2"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
+        </div>
       </div>
 
       {open && (

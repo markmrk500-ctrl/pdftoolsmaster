@@ -55,6 +55,8 @@ import Contact from "./pages/Contact.tsx";
 import Auth from "./pages/Auth.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AuthProvider } from "./hooks/useAuth";
+import { DensityProvider } from "./hooks/useDensity";
+import Compare from "./pages/Compare.tsx";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +67,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <DensityProvider>
           <AuthProvider>
             <ScrollToTop />
           <Routes>
@@ -116,10 +119,12 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/compare" element={<Compare />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
           </AuthProvider>
+          </DensityProvider>
         </BrowserRouter>
       </TooltipProvider>
     </HelmetProvider>
