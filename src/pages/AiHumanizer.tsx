@@ -5,6 +5,7 @@ import { FAQ } from "@/components/FAQ";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -16,8 +17,10 @@ import { Sparkles, Loader2, Copy, Download, Trash2, Wand2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { copyTextSafely, downloadBlobSafely } from "@/lib/aiToolCompat";
+import { cn } from "@/lib/utils";
 
 const MODES = [
+  { value: "light", label: "Light", hint: "Gentle polish, keeps original phrasing" },
   { value: "standard", label: "Standard", hint: "Natural, balanced rewrite" },
   { value: "advanced", label: "Advanced", hint: "Heavier humanization, removes AI patterns" },
   { value: "academic", label: "Academic", hint: "Formal essay / research tone" },
@@ -25,11 +28,27 @@ const MODES = [
   { value: "seo", label: "SEO Optimized", hint: "Reads human, keeps keywords" },
 ] as const;
 
+const TYPO_MODES = [
+  { value: "off", label: "Off", hint: "Clean, no imperfections" },
+  { value: "light", label: "Light", hint: "Tiny, harmless quirks" },
+  { value: "natural", label: "Natural", hint: "Casual fillers and small slips" },
+] as const;
+
 const faqs = [
   {
     question: "What does the AI Humanizer do?",
     answer:
       "It rewrites AI-generated text from ChatGPT, Gemini, Claude, DeepSeek and other models into natural, human-sounding writing. The meaning stays the same — the tone, rhythm and word choice are improved so it reads like a person wrote it.",
+  },
+  {
+    question: "What is the Humanizer Score?",
+    answer:
+      "A 0–100% estimate of how human the output reads, based on sentence-length variety (burstiness), vocabulary diversity, and reduction of common AI patterns. Higher is more human-like.",
+  },
+  {
+    question: "What does Typo Mode do?",
+    answer:
+      "It optionally adds tiny, realistic imperfections — a missing comma, a casual filler like 'you know', a contraction tweak — so the output reads less polished and more like a real person typed it. Keep it Off for formal use.",
   },
   {
     question: "Will it bypass AI detection tools?",
@@ -40,11 +59,6 @@ const faqs = [
     question: "Is my text saved or used to train models?",
     answer:
       "No. Your text is sent securely to the AI backend only to generate the rewrite. We do not store it, log it, or use it for training.",
-  },
-  {
-    question: "What's the difference between the modes?",
-    answer:
-      "Standard gives a balanced human rewrite. Advanced is more aggressive at removing AI tells. Academic is formal and research-friendly. Professional fits business writing. SEO Optimized keeps your keywords while sounding human.",
   },
   {
     question: "How long can the input be?",
@@ -62,7 +76,10 @@ const AiHumanizer = () => {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [mode, setMode] = useState<string>("standard");
+  const [typoMode, setTypoMode] = useState<string>("off");
+  const [compact, setCompact] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [score, setScore] = useState<number | null>(null);
 
   const charCount = input.length;
   const wordCount = useMemo(
@@ -86,13 +103,15 @@ const AiHumanizer = () => {
     }
     setProcessing(true);
     setOutput("");
+    setScore(null);
     try {
       const { data, error } = await supabase.functions.invoke("ai-humanize", {
-        body: { text: input, mode },
+        body: { text: input, mode, typoMode },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setOutput(data.output || "");
+      if (typeof data?.score === "number") setScore(data.score);
       toast({ title: "Humanized!", description: "Your text is ready." });
     } catch (e: any) {
       console.error(e);
@@ -119,7 +138,11 @@ const AiHumanizer = () => {
   const handleClear = () => {
     setInput("");
     setOutput("");
+    setScore(null);
   };
+
+  const pad = compact ? "space-y-3" : "space-y-6";
+  const taMin = compact ? "min-h-[140px]" : "min-h-[220px] md:min-h-[260px]";
 
   return (
     <ToolPageShell
@@ -137,10 +160,10 @@ const AiHumanizer = () => {
         applicationCategory: "BusinessApplication",
       }}
       toolUI={
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 items-end">
+        <div className={pad}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
             <div className="space-y-2">
-              <Label htmlFor="mode">Humanization mode</Label>
+              <Label htmlFor="mode">Humanization level</Label>
               <Select value={mode} onValueChange={setMode}>
                 <SelectTrigger id="mode">
                   <SelectValue />
@@ -155,14 +178,35 @@ const AiHumanizer = () => {
                 </SelectContent>
               </Select>
             </div>
-            <Button
-              variant="outline"
-              onClick={handleClear}
-              disabled={!input && !output}
-              className="sm:w-auto w-full"
-            >
-              <Trash2 className="h-4 w-4" /> Clear
-            </Button>
+            <div className="space-y-2">
+              <Label htmlFor="typo">Typo mode</Label>
+              <Select value={typoMode} onValueChange={setTypoMode}>
+                <SelectTrigger id="typo">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {TYPO_MODES.map((m) => (
+                    <SelectItem key={m.value} value={m.value}>
+                      <span className="font-medium">{m.label}</span>
+                      <span className="text-muted-foreground ml-2 text-xs">— {m.hint}</span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-end justify-between gap-3 md:justify-end">
+              <div className="flex items-center gap-2">
+                <Switch id="compact" checked={compact} onCheckedChange={setCompact} />
+                <Label htmlFor="compact" className="cursor-pointer">Compact view</Label>
+              </div>
+              <Button
+                variant="outline"
+                onClick={handleClear}
+                disabled={!input && !output}
+              >
+                <Trash2 className="h-4 w-4" /> Clear
+              </Button>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -177,12 +221,12 @@ const AiHumanizer = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Paste text from ChatGPT, Gemini, Claude, DeepSeek or any AI model..."
-              className="min-h-[220px] md:min-h-[260px] resize-y"
+              className={cn(taMin, "resize-y")}
             />
           </div>
 
           <Button
-            size="lg"
+            size={compact ? "default" : "lg"}
             className="w-full"
             disabled={processing || input.trim().length < 20}
             onClick={handleHumanize}
@@ -200,23 +244,41 @@ const AiHumanizer = () => {
 
           {output && (
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap gap-2">
                 <Label htmlFor="output" className="inline-flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-primary" /> Humanized output
                 </Label>
-                <span className="text-xs text-muted-foreground">
-                  {outWordCount} words • {outCharCount.toLocaleString()} characters
-                </span>
+                <div className="flex items-center gap-3">
+                  {score !== null && (
+                    <span
+                      className="text-xs font-medium px-2 py-1 rounded-md bg-primary/10 text-primary"
+                      title="Estimated human-likeness based on sentence variety, vocabulary diversity and AI-pattern reduction."
+                    >
+                      Humanizer Score: {score}%
+                    </span>
+                  )}
+                  <span className="text-xs text-muted-foreground">
+                    {outWordCount} words • {outCharCount.toLocaleString()} chars
+                  </span>
+                </div>
               </div>
+              {score !== null && (
+                <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-primary transition-all"
+                    style={{ width: `${Math.max(0, Math.min(100, score))}%` }}
+                  />
+                </div>
+              )}
               <Textarea
                 id="output"
                 value={output}
                 onChange={(e) => setOutput(e.target.value)}
-                className="min-h-[220px] md:min-h-[260px] resize-y bg-card"
+                className={cn(taMin, "resize-y bg-card")}
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Button variant="outline" onClick={handleCopy}>
-                  <Copy className="h-4 w-4" /> Copy
+                  <Copy className="h-4 w-4" /> Copy result
                 </Button>
                 <Button onClick={handleDownload}>
                   <Download className="h-4 w-4" /> Download .txt
@@ -241,6 +303,31 @@ const AiHumanizer = () => {
             instruction intact.
           </p>
 
+          <h3>How the Humanizer Score works</h3>
+          <p>
+            After every rewrite you'll see a <strong>Humanizer Score</strong> between 0 and
+            100%. It blends sentence-length variety (burstiness), vocabulary diversity, and
+            how many common AI patterns were removed. Higher means the writing reads more like
+            a person wrote it. Treat it as a guide, not a guarantee — AI detectors change all
+            the time.
+          </p>
+
+          <h3>Typo Mode: Off, Light, Natural</h3>
+          <p>
+            Real writing isn't perfect. <em>Typo Mode</em> lets you optionally add subtle
+            imperfections — a missing comma here, a casual "you know" there — so the output
+            stops sounding suspiciously polished. Keep it <em>Off</em> for academic or
+            professional work, use <em>Light</em> for blogs, and <em>Natural</em> for casual
+            posts and social copy.
+          </p>
+
+          <h3>Compact view</h3>
+          <p>
+            Prefer a tighter, less chunky interface? Flip on <em>Compact view</em> to shrink
+            padding, controls and the editor so more text fits on screen. Your choice sticks
+            for the session.
+          </p>
+
           <h3>How AI Humanizers Work</h3>
           <p>
             Under the hood, our humanizer sends your text to a powerful language model with a
@@ -248,8 +335,7 @@ const AiHumanizer = () => {
             remove repetitive AI phrasing, keep meaning identical, and never invent new facts.
             Depending on the mode you choose, the model adjusts register — casual,
             professional, academic, or SEO-friendly — and rewrites the text as if a human
-            writer were editing a first draft. The result is text with a real voice instead of
-            the smooth-but-flat tone that AI detectors and human readers both pick up on.
+            writer were editing a first draft.
           </p>
 
           <h3>Benefits of Humanizing AI Text</h3>
@@ -260,58 +346,6 @@ const AiHumanizer = () => {
             <li><strong>Stronger brand voice.</strong> Your blog, emails and product copy don't all sound like the same chatbot.</li>
             <li><strong>Saves editing time.</strong> Instead of manually rewriting every paragraph, you start from a clean human draft.</li>
             <li><strong>Works on any device.</strong> Mobile, tablet, laptop, desktop — same fast experience.</li>
-          </ul>
-
-          <h3>Humanize ChatGPT Content</h3>
-          <p>
-            ChatGPT is brilliant for first drafts, but its default voice is recognizable: long
-            balanced paragraphs, frequent hedging, and predictable openers. Paste your ChatGPT
-            output into the humanizer, pick <em>Advanced</em> for the strongest rewrite, and
-            you'll get back the same information in writing that feels like it came from a
-            person — varied sentence length, real transitions, and none of the giveaway
-            phrases. The same approach works for Gemini, Claude, DeepSeek, Llama, Mistral and
-            any other model.
-          </p>
-
-          <h3>Humanize Academic Writing</h3>
-          <p>
-            For essays, literature reviews and research summaries, choose <em>Academic</em>
-            mode. The tool keeps a formal register, uses precise vocabulary, hedges claims
-            appropriately and varies sentence structure the way a careful student or
-            researcher would. It still preserves your sources, arguments and conclusions
-            exactly — only the prose changes. Always check your institution's policy on AI use
-            and use humanized text as a starting point for your own writing, not a shortcut
-            around your own thinking.
-          </p>
-
-          <h3>Humanize for SEO and Marketing</h3>
-          <p>
-            <em>SEO Optimized</em> mode keeps your target keywords in place but breaks up the
-            overly uniform structure that Google's helpful-content systems are trained to
-            spot. Short scannable sentences alternate with longer ones, transitions feel
-            natural, and the page reads like genuine expertise. Pair it with the rest of the
-            Master PDF Tools suite — see the <Link to="/ai-summarize-pdf">AI Summarizer</Link>,{" "}
-            <Link to="/ai-translate-pdf">AI Translator</Link>,{" "}
-            <Link to="/ai-ocr-pdf">AI OCR</Link>,{" "}
-            <Link to="/ai-chat-pdf">Chat with PDF</Link> and{" "}
-            <Link to="/ai-mcq-generator">AI MCQ Generator</Link> — to build a full
-            content workflow.
-          </p>
-
-          <h3>Privacy &amp; Security</h3>
-          <p>
-            Your text is sent securely over HTTPS to our AI backend only to generate the
-            rewrite. We do not store it, log it, or use it for model training. Nothing is
-            shared with third parties beyond the AI inference call itself.
-          </p>
-
-          <h3>Tips for the best results</h3>
-          <ul>
-            <li>Paste cleanly formatted text — strip extra tabs or page numbers first.</li>
-            <li>Use <em>Advanced</em> mode for content that needs to read as fully original.</li>
-            <li>Humanize 1,000–2,000 words at a time for the tightest rewrite.</li>
-            <li>Always re-read the output. Add a personal example, anecdote or stat to make it unmistakably yours.</li>
-            <li>For long documents, combine with our <Link to="/extract-text">Extract Text</Link> tool to pull copy out of PDFs first.</li>
           </ul>
 
           <h3>Related tools on Master PDF Tools</h3>
