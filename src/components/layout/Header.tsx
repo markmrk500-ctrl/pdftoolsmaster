@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { FileText, Menu, X, ChevronDown, Heart, LogOut, User as UserIcon } from "lucide-react";
+import { Menu, X, ChevronDown, Heart, LogOut, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
