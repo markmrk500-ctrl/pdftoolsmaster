@@ -1,6 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X, ChevronDown, Heart, LogOut, User as UserIcon } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown, Heart, LogOut, User as UserIcon, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -96,17 +95,72 @@ const categoryGroups: { name: string; tools: { to: string; label: string }[] }[]
   },
 ];
 
-const moreTools = categoryGroups.flatMap((g) => g.tools);
-const allTools = [...primaryTools, ...moreTools];
+const companyLinks = [
+  { to: "/about", label: "About" },
+  { to: "/compare", label: "Compare" },
+  { to: "/contact", label: "Contact" },
+];
+
+const legalLinks = [
+  { to: "/privacy", label: "Privacy Policy" },
+  { to: "/terms", label: "Terms of Service" },
+];
+
+const AllToolsMenu = ({ align = "end" }: { align?: "start" | "end" }) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger className="px-3 py-2 text-sm font-medium rounded-md text-foreground/70 hover:text-primary inline-flex items-center gap-1 outline-none">
+      <Wrench className="h-4 w-4" /> Tools <ChevronDown className="h-3.5 w-3.5" />
+    </DropdownMenuTrigger>
+    <DropdownMenuContent
+      align={align}
+      className="w-[min(560px,calc(100vw-1rem))] max-h-[70vh] overflow-y-auto p-3 grid grid-cols-1 sm:grid-cols-2 gap-3 overscroll-contain"
+    >
+      {categoryGroups.map((g) => (
+        <div key={g.name} className="space-y-1">
+          <div className="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {g.name}
+          </div>
+          {g.tools.map((t) => (
+            <DropdownMenuItem key={t.to} asChild>
+              <Link to={t.to} className="text-sm">{t.label}</Link>
+            </DropdownMenuItem>
+          ))}
+        </div>
+      ))}
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
+
+const CompanyLegalMenu = () => (
+  <DropdownMenu>
+    <DropdownMenuTrigger className="px-3 py-2 text-sm font-medium rounded-md text-foreground/70 hover:text-primary inline-flex items-center gap-1 outline-none">
+      More <ChevronDown className="h-3.5 w-3.5" />
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuLabel className="text-xs uppercase tracking-wide text-muted-foreground">Company</DropdownMenuLabel>
+      {companyLinks.map((l) => (
+        <DropdownMenuItem key={l.to} asChild>
+          <Link to={l.to}>{l.label}</Link>
+        </DropdownMenuItem>
+      ))}
+      <DropdownMenuSeparator />
+      <DropdownMenuLabel className="text-xs uppercase tracking-wide text-muted-foreground">Legal</DropdownMenuLabel>
+      {legalLinks.map((l) => (
+        <DropdownMenuItem key={l.to} asChild>
+          <Link to={l.to}>{l.label}</Link>
+        </DropdownMenuItem>
+      ))}
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
 
 export const Header = () => {
-  const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2 font-bold text-lg">
-          <img src="/logo.png" alt="PDFMaster Tools" className="h-9 w-9 rounded-lg" />
-          <span>PDFMaster<span className="text-primary"> Tools</span></span>
+      <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-4">
+        <Link to="/" className="flex items-center gap-2 font-bold text-lg shrink-0">
+          <img src="/logo.png" alt="PDFMaster Tools" className="h-9 w-9" />
+          <span className="hidden sm:inline">PDFMaster<span className="text-primary"> Tools</span></span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
@@ -123,74 +177,22 @@ export const Header = () => {
               {t.label}
             </NavLink>
           ))}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="px-3 py-2 text-sm font-medium rounded-md text-foreground/70 hover:text-primary inline-flex items-center gap-1 outline-none">
-              All Tools <ChevronDown className="h-3.5 w-3.5" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="w-[min(560px,calc(100vw-1rem))] max-h-[70vh] overflow-y-auto p-3 grid grid-cols-1 sm:grid-cols-2 gap-3 overscroll-contain"
-            >
-              {categoryGroups.map((g) => (
-                <div key={g.name} className="space-y-1">
-                  <div className="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    {g.name}
-                  </div>
-                  {g.tools.map((t) => (
-                    <DropdownMenuItem key={t.to} asChild>
-                      <Link to={t.to} className="text-sm">{t.label}</Link>
-                    </DropdownMenuItem>
-                  ))}
-                </div>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <AllToolsMenu />
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
           <DensityToggle />
-          <Link to="/compare" className="px-3 py-2 text-sm font-medium text-foreground/70 hover:text-primary rounded-md">
-            Compare
-          </Link>
+          <CompanyLegalMenu />
           <UserMenu />
         </div>
 
         <div className="md:hidden flex items-center gap-1">
+          <AllToolsMenu align="end" />
+          <CompanyLegalMenu />
           <DensityToggle />
-        <button
-          className="p-2"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+          <UserMenu />
         </div>
       </div>
-
-      {open && (
-        <div className="md:hidden border-t border-border bg-background max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain">
-          <nav className="container mx-auto px-4 py-3 flex flex-col gap-1">
-
-            {allTools.map((t) => (
-              <NavLink
-                key={t.to}
-                to={t.to}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) =>
-                  `px-3 py-2 text-sm font-medium rounded-md ${
-                    isActive ? "bg-accent text-primary" : "text-foreground/80"
-                  }`
-                }
-              >
-                {t.label}
-              </NavLink>
-            ))}
-            <div className="pt-2 mt-2 border-t border-border">
-              <MobileUserMenu onNavigate={() => setOpen(false)} />
-            </div>
-          </nav>
-        </div>
-      )}
     </header>
   );
 };
@@ -202,7 +204,7 @@ const UserMenu = () => {
     return (
       <Button asChild variant="default" size="sm">
         <Link to="/auth">
-          <Heart className="h-4 w-4" /> Sign In
+          <Heart className="h-4 w-4" /> <span className="hidden sm:inline">Sign In</span>
         </Link>
       </Button>
     );
@@ -212,7 +214,7 @@ const UserMenu = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
           <UserIcon className="h-4 w-4" />
-          <span className="max-w-[140px] truncate">{user.email}</span>
+          <span className="max-w-[140px] truncate hidden sm:inline">{user.email}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
@@ -223,34 +225,5 @@ const UserMenu = () => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
-
-const MobileUserMenu = ({ onNavigate }: { onNavigate: () => void }) => {
-  const { user, signOut } = useAuth();
-  if (!user) {
-    return (
-      <Link
-        to="/auth"
-        onClick={onNavigate}
-        className="px-3 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground inline-flex items-center gap-2"
-      >
-        <Heart className="h-4 w-4" /> Sign In to Save Favorites
-      </Link>
-    );
-  }
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="px-3 py-1 text-xs text-muted-foreground truncate">{user.email}</span>
-      <button
-        onClick={() => {
-          signOut();
-          onNavigate();
-        }}
-        className="px-3 py-2 text-sm font-medium rounded-md text-destructive text-left inline-flex items-center gap-2"
-      >
-        <LogOut className="h-4 w-4" /> Sign Out
-      </button>
-    </div>
   );
 };

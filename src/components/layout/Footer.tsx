@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { FileText } from "lucide-react";
 
 export const Footer = () => {
   return (
@@ -8,9 +7,7 @@ export const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 font-bold mb-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <FileText className="h-4 w-4" />
-              </span>
+              <img src="/logo.png" alt="PDFMaster Tools" className="h-8 w-8" />
               <span>PDFMaster Tools</span>
             </Link>
             <p className="text-sm text-muted-foreground">
