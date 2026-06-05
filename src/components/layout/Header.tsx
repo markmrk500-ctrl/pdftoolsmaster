@@ -109,7 +109,7 @@ const legalLinks = [
 const AllToolsMenu = ({ align = "end" }: { align?: "start" | "end" }) => (
   <DropdownMenu>
     <DropdownMenuTrigger className="px-3 py-2 text-sm font-medium rounded-md text-foreground/70 hover:text-primary inline-flex items-center gap-1 outline-none">
-      <Wrench className="h-4 w-4" /> Tools <ChevronDown className="h-3.5 w-3.5" />
+      <Wrench className="h-4 w-4" /> All Tools <ChevronDown className="h-3.5 w-3.5" />
     </DropdownMenuTrigger>
     <DropdownMenuContent
       align={align}
