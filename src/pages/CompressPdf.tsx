@@ -66,7 +66,12 @@ const CompressPdf = () => {
       const { scale, quality } = settings[level];
 
       // Render each page to canvas, re-encode as JPEG, then build a new PDF.
-      const loadingTask = pdfjsLib.getDocument({ data: bytes.slice(0) });
+      const loadingTask = pdfjsLib.getDocument({
+        data: bytes.slice(0),
+        password: "",
+        isEvalSupported: false,
+        useSystemFonts: true,
+      });
       const pdfDoc = await loadingTask.promise;
       const out = await PDFDocument.create();
 
@@ -74,8 +79,8 @@ const CompressPdf = () => {
         const page = await pdfDoc.getPage(i);
         const viewport = page.getViewport({ scale });
         const canvas = document.createElement("canvas");
-        canvas.width = Math.floor(viewport.width);
-        canvas.height = Math.floor(viewport.height);
+        canvas.width = Math.max(1, Math.floor(viewport.width));
+        canvas.height = Math.max(1, Math.floor(viewport.height));
         const ctx = canvas.getContext("2d")!;
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -106,13 +111,19 @@ const CompressPdf = () => {
       setResult({ before: bytes.byteLength, after: finalBytes.byteLength });
       setProgress(100);
       toast({ title: "Compression complete", description: "Your file has been downloaded." });
-    } catch (e) {
-      console.error(e);
-      toast({
-        title: "Compression failed",
-        description: "File may be corrupted or password-protected.",
-        variant: "destructive",
-      });
+    } catch (e: any) {
+      console.error("Compress PDF error:", e);
+      const name = e?.name || "";
+      const msg = String(e?.message || e || "");
+      let description = "Something went wrong while compressing this PDF. Please try again.";
+      if (name === "PasswordException" || /password/i.test(msg)) {
+        description = "This PDF is password-protected. Please remove the password (try our Unlock PDF tool) and try again.";
+      } else if (name === "InvalidPDFException" || /invalid pdf|corrupt|missing pdf/i.test(msg)) {
+        description = "This file doesn't look like a valid PDF or it may be damaged. Try our Repair PDF tool first.";
+      } else if (/memory|allocation|maximum call stack/i.test(msg)) {
+        description = "The PDF is too large or complex for your browser's memory. Try splitting it first or using a lower compression level.";
+      }
+      toast({ title: "Compression failed", description, variant: "destructive" });
     } finally {
       setProcessing(false);
       setTimeout(() => setProgress(0), 1500);
