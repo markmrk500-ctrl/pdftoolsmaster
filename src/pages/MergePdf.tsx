@@ -17,7 +17,7 @@ const faqs = [
   {
     question: "Is there a limit on the number of PDFs I can merge?",
     answer:
-      "There is no hard limit on the number of files. However, very large combined files may use significant browser memory. For best performance, keep the total size under 50MB and use a modern browser like Chrome, Edge, Firefox, or Safari.",
+      "There is no hard limit on the number of files. However, very large combined files may use significant browser memory. For best performance, keep the total size under 150MB and use a modern browser like Chrome, Edge, Firefox, or Safari.",
   },
   {
     question: "Are my PDF files uploaded to a server?",
@@ -116,7 +116,7 @@ const MergePdf = () => {
             files={[]}
             onFiles={addFiles}
             cta="Drop PDF files here or click to upload"
-            subtitle="Select 2 or more PDFs • Max 50MB each"
+            subtitle="Select 2 or more PDFs • Max 150MB each"
           />
 
           {files.length > 0 && (

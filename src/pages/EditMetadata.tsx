@@ -80,7 +80,7 @@ const EditMetadata = () => {
       faqSchema={faqs}
       toolUI={
         <div className="space-y-6">
-          <FileDropzone files={files} onFiles={(f) => handleLoad(f[0])} onRemove={() => setFiles([])} cta="Drop a PDF here or click to upload" subtitle="One file at a time • Max 50MB" />
+          <FileDropzone files={files} onFiles={(f) => handleLoad(f[0])} onRemove={() => setFiles([])} cta="Drop a PDF here or click to upload" subtitle="One file at a time • Max 150MB" />
           {files[0] && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-card border border-border rounded-xl p-4">
               <div className="space-y-2"><Label>Title</Label><Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Document title" /></div>

@@ -103,7 +103,7 @@ const ExtractText = () => {
               setText("");
             }}
             cta="Drop a PDF here or click to upload"
-            subtitle="One file at a time • Max 50MB"
+            subtitle="One file at a time • Max 150MB"
           />
 
           {processing && <Progress value={progress} />}

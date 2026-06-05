@@ -27,7 +27,7 @@ const faqs = [
   { question: "How does Chat with PDF work?", answer: "We extract the text from your PDF in your browser, then send your question along with the most relevant pages to a fast AI model. Answers include inline page citations like [p. 3] so you can jump back to the source." },
   { question: "Is my PDF private?", answer: "Text extraction happens locally in your browser. Only the text needed to answer your question is sent to the AI — never the file itself." },
   { question: "How are large PDFs handled?", answer: "For documents over ~70,000 characters we automatically pick the most relevant pages for each question using keyword scoring, so responses stay fast." },
-  { question: "What file types are supported?", answer: "PDF files up to 50MB. Scanned PDFs without selectable text won't work — use the AI OCR tool first to extract text." },
+  { question: "What file types are supported?", answer: "PDF files up to 150MB. Scanned PDFs without selectable text won't work — use the AI OCR tool first to extract text." },
 ];
 
 // Pick the most relevant pages by keyword overlap with the user's question
@@ -94,8 +94,8 @@ const AiChatPdf = () => {
       toast({ title: "PDF only", description: "Please upload a PDF file.", variant: "destructive" });
       return;
     }
-    if (f.size > 50 * 1024 * 1024) {
-      toast({ title: "File too large", description: "Max 50MB.", variant: "destructive" });
+    if (f.size > 150 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Max 150MB.", variant: "destructive" });
       return;
     }
     setFile(f);
@@ -240,7 +240,7 @@ const AiChatPdf = () => {
                   <Upload className="h-6 w-6 text-primary" />
                 </div>
                 <p className="font-semibold text-base md:text-lg">Drop PDF here or click to upload</p>
-                <p className="text-sm text-muted-foreground">Max 50MB · PDF only</p>
+                <p className="text-sm text-muted-foreground">Max 150MB · PDF only</p>
               </div>
             </label>
           ) : (
@@ -360,7 +360,7 @@ const AiChatPdf = () => {
           </p>
           <h3>How It Works</h3>
           <ol>
-            <li>Upload a PDF up to 50MB. Text is extracted privately in your browser.</li>
+            <li>Upload a PDF up to 150MB. Text is extracted privately in your browser.</li>
             <li>Type a question. The most relevant pages are selected automatically for fast responses, even on large PDFs.</li>
             <li>Read the streamed answer with citations like <code>[p. 12]</code>, then ask follow-ups — the full conversation history is kept.</li>
           </ol>

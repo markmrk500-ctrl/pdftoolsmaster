@@ -51,7 +51,7 @@ const SUBJECTS = [
 const CUSTOM = "__custom__";
 
 const faqs = [
-  { question: "Which file types are supported?", answer: "PDF, DOCX, and TXT files up to 50MB. You can also paste raw text directly." },
+  { question: "Which file types are supported?", answer: "PDF, DOCX, and TXT files up to 150MB. You can also paste raw text directly." },
   { question: "Why do I need to pick a subject?", answer: "The subject tunes the AI to use the right terminology, notation, and difficulty for your field — so MCQs from a Biology PDF feel like real Biology questions, not generic ones." },
   { question: "How are the questions generated?", answer: "Your selected content plus your chosen subject are sent to our AI (OpenAI GPT-5 or Google Gemini). The model writes 4-option MCQs with one correct answer and an explanation." },
   { question: "Can I limit which pages are used?", answer: "Yes. For PDFs you can specify a page range (e.g. 3-12). Only that portion of the document is sent to the AI." },
@@ -114,8 +114,8 @@ const AiMcqGenerator = () => {
       toast({ title: "Unsupported file", description: "Please upload a PDF, DOCX, or TXT file.", variant: "destructive" });
       return;
     }
-    if (f.size > 50 * 1024 * 1024) {
-      toast({ title: "File too large", description: "Maximum file size is 50MB.", variant: "destructive" });
+    if (f.size > 150 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Maximum file size is 150MB.", variant: "destructive" });
       return;
     }
     setFile(f);
@@ -413,7 +413,7 @@ const FileDropzoneAny = ({
         <div className="flex flex-col items-center gap-2">
           <Sparkles className="h-6 w-6 text-primary" />
           <p className="font-semibold">Drop PDF, DOCX or TXT here, or click to upload</p>
-          <p className="text-sm text-muted-foreground">Max 50MB</p>
+          <p className="text-sm text-muted-foreground">Max 150MB</p>
         </div>
       </label>
       {file && (
