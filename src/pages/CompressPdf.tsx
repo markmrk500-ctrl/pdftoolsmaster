@@ -14,7 +14,8 @@ import {
 import { Download, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+
+
 
 const faqs = [
   {
