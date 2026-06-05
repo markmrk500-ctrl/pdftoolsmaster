@@ -83,7 +83,7 @@ const CropPdf = () => {
             onFiles={(f) => setFiles([f[0]])}
             onRemove={() => setFiles([])}
             cta="Drop a PDF here or click to upload"
-            subtitle="One file at a time • Max 50MB"
+            subtitle="One file at a time • Max 150MB"
           />
 
           <div className="space-y-2">

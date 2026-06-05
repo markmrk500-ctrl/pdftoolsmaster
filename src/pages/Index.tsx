@@ -188,7 +188,7 @@ const faqs = [
   {
     question: "What is the maximum file size I can process?",
     answer:
-      "You can process PDFs up to 50MB. For very large files, browser performance depends on your device's memory.",
+      "You can process PDFs up to 150MB. For very large files, browser performance depends on your device's memory.",
   },
   {
     question: "Do I need to install any software?",

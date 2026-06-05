@@ -88,7 +88,7 @@ const ResizePdfNup = () => {
       faqSchema={faqs}
       toolUI={
         <div className="space-y-6">
-          <FileDropzone files={files} onFiles={(f) => setFiles([f[0]])} onRemove={() => setFiles([])} cta="Drop a PDF here or click to upload" subtitle="One file at a time • Max 50MB" />
+          <FileDropzone files={files} onFiles={(f) => setFiles([f[0]])} onRemove={() => setFiles([])} cta="Drop a PDF here or click to upload" subtitle="One file at a time • Max 150MB" />
           <div className="bg-card border border-border rounded-xl p-4">
             <Label>Pages per sheet</Label>
             <Select value={String(n)} onValueChange={(v) => setN(Number(v) as 2 | 4)}>

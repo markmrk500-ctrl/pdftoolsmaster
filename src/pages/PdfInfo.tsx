@@ -60,7 +60,7 @@ const PdfInfo = () => {
       faqSchema={faqs}
       toolUI={
         <div className="space-y-6">
-          <FileDropzone files={files} onFiles={(f) => handleLoad(f[0])} onRemove={() => { setFiles([]); setInfo(null); setPages([]); }} cta="Drop a PDF here or click to upload" subtitle="One file at a time • Max 50MB" />
+          <FileDropzone files={files} onFiles={(f) => handleLoad(f[0])} onRemove={() => { setFiles([]); setInfo(null); setPages([]); }} cta="Drop a PDF here or click to upload" subtitle="One file at a time • Max 150MB" />
           {loading && <div className="flex items-center justify-center text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin mr-2" /> Reading...</div>}
           {info && (
             <div className="bg-card border border-border rounded-xl overflow-hidden">

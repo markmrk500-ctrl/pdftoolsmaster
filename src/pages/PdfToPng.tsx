@@ -82,7 +82,7 @@ const PdfToPng = () => {
       faqSchema={faqs}
       toolUI={
         <div className="space-y-6">
-          <FileDropzone files={files} onFiles={(f) => setFiles([f[0]])} onRemove={() => setFiles([])} cta="Drop a PDF here or click to upload" subtitle="One file at a time • Max 50MB" />
+          <FileDropzone files={files} onFiles={(f) => setFiles([f[0]])} onRemove={() => setFiles([])} cta="Drop a PDF here or click to upload" subtitle="One file at a time • Max 150MB" />
           {processing && <Progress value={progress} />}
           <Button size="lg" className="w-full" disabled={!files[0] || processing} onClick={handleConvert}>
             {processing ? (<><Loader2 className="h-4 w-4 animate-spin" /> Converting...</>) : (<><ImageIcon className="h-4 w-4" /> Convert to PNG</>)}

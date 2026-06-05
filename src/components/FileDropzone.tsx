@@ -3,7 +3,7 @@ import { useDropzone } from "react-dropzone";
 import { Upload, FileText, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const MAX_SIZE = 50 * 1024 * 1024; // 50 MB
+const MAX_SIZE = 150 * 1024 * 1024; // 150 MB
 
 interface FileDropzoneProps {
   multiple?: boolean;
@@ -20,7 +20,7 @@ export const FileDropzone = ({
   files = [],
   onRemove,
   cta = "Drop PDF here or click to upload",
-  subtitle = "Max file size 50MB",
+  subtitle = "Max file size 150MB",
 }: FileDropzoneProps) => {
   const [error, setError] = useState<string | null>(null);
 
@@ -30,7 +30,7 @@ export const FileDropzone = ({
       if (rejected.length > 0) {
         const r = rejected[0];
         if (r.errors?.[0]?.code === "file-too-large") {
-          setError("File too large. Maximum size is 50MB.");
+          setError("File too large. Maximum size is 150MB.");
         } else if (r.errors?.[0]?.code === "file-invalid-type") {
           setError("Invalid file type. Only PDF files are allowed.");
         } else {

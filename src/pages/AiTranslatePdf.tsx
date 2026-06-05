@@ -149,7 +149,7 @@ const AiTranslatePdf = () => {
             onFiles={(f) => { setFile(f[0]); setTranslated(""); }}
             onRemove={() => { setFile(null); setTranslated(""); }}
             cta="Drop a PDF to translate"
-            subtitle="Max 50MB"
+            subtitle="Max 150MB"
           />
           <div>
             <Label htmlFor="lang">Translate into</Label>

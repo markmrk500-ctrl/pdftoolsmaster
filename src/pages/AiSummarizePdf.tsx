@@ -80,7 +80,7 @@ const AiSummarizePdf = () => {
             onFiles={(f) => { setFile(f[0]); setSummary(""); }}
             onRemove={() => { setFile(null); setSummary(""); }}
             cta="Drop a PDF to summarize"
-            subtitle="Up to ~100 pages • Max 50MB"
+            subtitle="Up to ~100 pages • Max 150MB"
           />
           {processing && <Progress value={progress} />}
           <Button size="lg" className="w-full" disabled={!file || processing} onClick={handleSummarize}>

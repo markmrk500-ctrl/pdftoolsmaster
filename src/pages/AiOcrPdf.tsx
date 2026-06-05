@@ -89,7 +89,7 @@ const AiOcrPdf = () => {
             onFiles={(f) => { setFile(f[0]); setText(""); }}
             onRemove={() => { setFile(null); setText(""); }}
             cta="Drop a scanned PDF here"
-            subtitle={`First ${MAX_PAGES} pages • Max 50MB`}
+            subtitle={`First ${MAX_PAGES} pages • Max 150MB`}
           />
           {processing && <Progress value={progress} />}
           <Button size="lg" className="w-full" disabled={!file || processing} onClick={handleOcr}>
