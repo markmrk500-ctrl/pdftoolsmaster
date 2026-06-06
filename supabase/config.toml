@@ -1,1 +1,4 @@
 project_id = "ynowstehvmzgpadfklya"
+
+[functions.fetch-url]
+verify_jwt = false
