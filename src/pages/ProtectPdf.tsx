@@ -51,9 +51,19 @@ const ProtectPdf = () => {
       const bytes = await files[0].arrayBuffer();
       const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
       setProgress(50);
-      // pdf-lib does not support encryption natively, so we use save with userPassword via any-cast workaround.
-      // Fallback: re-save and rely on "encrypt" option if available, otherwise warn user.
-      const out = await (pdf.save as any)({ userPassword: password, ownerPassword: password });
+      const out = await pdf.save({
+        userPassword: password,
+        ownerPassword: password,
+        permissions: {
+          printing: "highResolution",
+          modifying: false,
+          copying: false,
+          annotating: false,
+          fillingForms: true,
+          contentAccessibility: true,
+          documentAssembly: false,
+        },
+      } as any);
       const blob = new Blob([out as BlobPart], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
