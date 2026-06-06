@@ -100,8 +100,7 @@ const ProtectPdf = () => {
           <div className="flex gap-3 bg-accent/50 border border-border rounded-lg p-4 text-sm">
             <AlertTriangle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
             <p className="text-muted-foreground">
-              Browser-based encryption has limitations. For highly confidential
-              documents, use a desktop tool that supports AES-256 encryption.
+              Your password is applied locally in the browser using standard PDF encryption supported by Adobe Acrobat, Preview, Chrome and Edge. Choose a strong password — we cannot recover it for you.
             </p>
           </div>
 
