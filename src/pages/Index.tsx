@@ -54,6 +54,10 @@ import {
   MessageSquare,
   ListChecks,
   Wand2,
+  FileSpreadsheet,
+  FileText as FileTextIcon2,
+  ClipboardEdit,
+  EyeOff,
 } from "lucide-react";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { useFavorites } from "@/hooks/useFavorites";
