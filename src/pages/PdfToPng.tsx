@@ -1,25 +1,46 @@
 import { useState } from "react";
-import * as pdfjsLib from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import JSZip from "jszip";
+import { pdfjsLib } from "@/lib/pdfjs";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
 import { FAQ } from "@/components/FAQ";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Loader2, Image as ImageIcon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
-
 const faqs = [
-  { question: "Why use PNG instead of JPG?", answer: "PNG is lossless and supports transparency — better for screenshots, diagrams, and crisp text rendering where compression artifacts are unacceptable." },
-  { question: "How are multiple pages delivered?", answer: "Multi-page PDFs are bundled into a single ZIP archive containing one PNG per page." },
-  { question: "Are my files uploaded?", answer: "No. Rendering happens entirely in your browser using PDF.js." },
+  { question: "Can I choose the output resolution?", answer: "Yes — 72 DPI (screen), 150 DPI (default), or 300 DPI (high detail print)." },
+  { question: "Can I convert only some pages?", answer: "Yes. Enter a page range like '1-3, 5, 8-10'. Leave blank to convert every page." },
+  { question: "How are multiple pages delivered?", answer: "Multi-page PDFs deliver a single ZIP archive containing one PNG per page." },
 ];
+
+const DPI_MAP = { "72": 1, "150": 2.083, "300": 4.167 } as const;
+
+const parsePages = (input: string, total: number): number[] => {
+  const s = input.trim();
+  if (!s) return Array.from({ length: total }, (_, i) => i + 1);
+  const out = new Set<number>();
+  for (const part of s.split(",").map((p) => p.trim()).filter(Boolean)) {
+    if (part.includes("-")) {
+      const [a, b] = part.split("-").map((n) => parseInt(n, 10));
+      if (isNaN(a) || isNaN(b)) continue;
+      for (let i = Math.max(1, a); i <= Math.min(total, b); i++) out.add(i);
+    } else {
+      const n = parseInt(part, 10);
+      if (!isNaN(n) && n >= 1 && n <= total) out.add(n);
+    }
+  }
+  return [...out].sort((a, b) => a - b);
+};
 
 const PdfToPng = () => {
   const [files, setFiles] = useState<File[]>([]);
+  const [dpi, setDpi] = useState<keyof typeof DPI_MAP>("150");
+  const [pages, setPages] = useState("");
   const [progress, setProgress] = useState(0);
   const [processing, setProcessing] = useState(false);
 
@@ -32,18 +53,27 @@ const PdfToPng = () => {
       const bytes = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
       const baseName = file.name.replace(/\.pdf$/i, "");
+      const targetPages = parsePages(pages, pdf.numPages);
+      if (!targetPages.length) {
+        toast({ title: "No valid pages selected", variant: "destructive" });
+        setProcessing(false);
+        return;
+      }
+      const scale = DPI_MAP[dpi];
+
       const blobs: { name: string; blob: Blob }[] = [];
-      for (let i = 1; i <= pdf.numPages; i++) {
+      for (let idx = 0; idx < targetPages.length; idx++) {
+        const i = targetPages[idx];
         const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 2 });
+        const viewport = page.getViewport({ scale });
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d")!;
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-        await page.render({ canvasContext: ctx, viewport } as any).promise;
+        await page.render({ canvasContext: ctx, viewport, canvas } as any).promise;
         const blob = await new Promise<Blob>((res) => canvas.toBlob((b) => res(b!), "image/png"));
         blobs.push({ name: `${baseName}-page-${i}.png`, blob });
-        setProgress(10 + Math.round((i / pdf.numPages) * 80));
+        setProgress(10 + Math.round(((idx + 1) / targetPages.length) * 80));
       }
 
       if (blobs.length === 1) {
@@ -74,16 +104,42 @@ const PdfToPng = () => {
 
   return (
     <ToolPageShell
-      title="PDF to PNG Online Free – Convert PDF Pages to PNG on Any Device | Master PDF Tools"
-      description="Convert PDF pages to high-resolution PNG images online. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
-      keywords="PDF to PNG Online Free, PDF to PNG Converter, PDF to PNG for All Devices, Mobile PDF to PNG, pdf to png, pdf to png converter, convert pdf to png, pdf page to png image"
-      h1="PDF to PNG Converter — Free Online"
-      intro="Render every page of your PDF as a sharp, lossless PNG image. Multi-page PDFs are delivered as a single ZIP."
+      title="PDF to PNG Online Free – DPI & Page Range Control | Master PDF Tools"
+      description="Convert PDF pages to lossless PNG with resolution presets and page-range control. Runs entirely in your browser."
+      keywords="PDF to PNG Online Free, PDF to PNG Converter, pdf to png, pdf to png high resolution, convert pdf pages to png"
+      h1="PDF to PNG Converter — Choose DPI and Pages"
+      intro="Render PDF pages as lossless PNGs with resolution and page-range control."
       faqSchema={faqs}
       toolUI={
         <div className="space-y-6">
           <FileDropzone files={files} onFiles={(f) => setFiles([f[0]])} onRemove={() => setFiles([])} cta="Drop a PDF here or click to upload" subtitle="One file at a time • Max 150MB" />
+
+          <div className="space-y-3">
+            <Label>Resolution</Label>
+            <RadioGroup value={dpi} onValueChange={(v) => setDpi(v as keyof typeof DPI_MAP)} className="grid grid-cols-3 gap-3">
+              {(["72", "150", "300"] as const).map((v) => (
+                <Label key={v} htmlFor={`dpi-${v}`} className="flex flex-col items-start gap-1 border border-border rounded-lg p-4 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-accent/50">
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value={v} id={`dpi-${v}`} />
+                    <span className="font-semibold">{v} DPI</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {v === "72" && "Screen"}
+                    {v === "150" && "Print-ready"}
+                    {v === "300" && "High detail"}
+                  </span>
+                </Label>
+              ))}
+            </RadioGroup>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="png-pages">Pages (optional)</Label>
+            <Input id="png-pages" placeholder="e.g., 1-3, 5, 8-10 — leave blank for all" value={pages} onChange={(e) => setPages(e.target.value)} />
+          </div>
+
           {processing && <Progress value={progress} />}
+
           <Button size="lg" className="w-full" disabled={!files[0] || processing} onClick={handleConvert}>
             {processing ? (<><Loader2 className="h-4 w-4 animate-spin" /> Converting...</>) : (<><ImageIcon className="h-4 w-4" /> Convert to PNG</>)}
           </Button>
@@ -91,24 +147,10 @@ const PdfToPng = () => {
       }
       seoContent={
         <>
-          <h2>How to Convert PDF to PNG Images Online</h2>
-          <p>PNG is the preferred image format whenever you need lossless quality, sharp text, or transparency. Unlike JPG, PNG does not introduce compression artifacts around letters, line art, or solid color fills, which makes it the right choice for screenshots of contracts, diagrams from technical manuals, infographics, scanned forms, and any page where readability matters more than file size.</p>
-          <h3>Step-by-Step</h3>
-          <ol>
-            <li><strong>Upload your PDF</strong> using the dropzone above.</li>
-            <li><strong>Click Convert to PNG.</strong> Each page is rendered at 2× resolution.</li>
-            <li><strong>Download.</strong> Single-page PDFs deliver one PNG; multi-page PDFs come as a ZIP.</li>
-          </ol>
-          <h3>When to Choose PNG Over JPG</h3>
-          <ul>
-            <li>Screenshots of text-heavy pages where compression artifacts hurt readability</li>
-            <li>Diagrams, charts, and line art that require crisp edges</li>
-            <li>Pages with logos or graphics that need transparent backgrounds</li>
-            <li>Archival exports where preserving exact pixel data matters</li>
-            <li>Inputs for OCR pipelines that benefit from lossless source images</li>
-          </ul>
-          <h3>Privacy by Default</h3>
-          <p>Your PDF is processed entirely inside your browser tab using PDF.js and the HTML canvas API. Nothing is uploaded to any server, so even confidential documents stay private.</p>
+          <h2>Lossless PDF to PNG with Real Resolution Control</h2>
+          <p>Pick 72, 150, or 300 DPI — matching what desktop tools offer — and optionally restrict to specific pages. PNG keeps text edges crisp and supports transparency, ideal for screenshots, diagrams, and OCR pipelines.</p>
+          <h3>Privacy</h3>
+          <p>Rendering happens entirely in your browser using PDF.js. Nothing is uploaded.</p>
         </>
       }
       faqSection={<FAQ items={faqs} />}

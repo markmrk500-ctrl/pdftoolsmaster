@@ -57,6 +57,10 @@ import NotFound from "./pages/NotFound.tsx";
 import { AuthProvider } from "./hooks/useAuth";
 import { DensityProvider } from "./hooks/useDensity";
 import Compare from "./pages/Compare.tsx";
+import ExcelToPdf from "./pages/ExcelToPdf.tsx";
+import WordToPdf from "./pages/WordToPdf.tsx";
+import FillForms from "./pages/FillForms.tsx";
+import RedactPdf from "./pages/RedactPdf.tsx";
 
 const queryClient = new QueryClient();
 
@@ -120,6 +124,10 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/compare" element={<Compare />} />
+            <Route path="/excel-to-pdf" element={<ExcelToPdf />} />
+            <Route path="/word-to-pdf" element={<WordToPdf />} />
+            <Route path="/fill-forms" element={<FillForms />} />
+            <Route path="/redact-pdf" element={<RedactPdf />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

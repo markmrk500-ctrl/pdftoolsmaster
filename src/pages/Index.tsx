@@ -54,6 +54,10 @@ import {
   MessageSquare,
   ListChecks,
   Wand2,
+  FileSpreadsheet,
+  FileText as FileTextIcon2,
+  ClipboardEdit,
+  EyeOff,
 } from "lucide-react";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { useFavorites } from "@/hooks/useFavorites";
@@ -113,6 +117,8 @@ const categories: { id: string; name: string; description: string; tools: (Tool 
       { to: "/text-to-pdf", icon: Type, title: "Text to PDF", description: "Paste any text and convert it into a paginated PDF.", color: "tool-merge" },
       { to: "/markdown-to-pdf", icon: FileCode, title: "Markdown to PDF", description: "Render Markdown into a beautifully styled PDF.", color: "tool-split" },
       { to: "/blank-pdf", icon: FilePlus2, title: "Blank PDF", description: "Generate empty PDFs in any standard size.", color: "tool-merge" },
+      { to: "/word-to-pdf", icon: FileTextIcon2, title: "Word to PDF", description: "Convert DOCX documents into polished PDFs.", color: "tool-convert", isNew: true },
+      { to: "/excel-to-pdf", icon: FileSpreadsheet, title: "Excel to PDF", description: "Convert XLSX/XLS sheets into paginated PDFs.", color: "tool-split", isNew: true },
     ],
   },
   {
@@ -150,6 +156,8 @@ const categories: { id: string; name: string; description: string; tools: (Tool 
     tools: [
       { to: "/protect-pdf", icon: Lock, title: "Protect PDF", description: "Add a password to keep your PDF private.", color: "tool-convert" },
       { to: "/unlock-pdf", icon: Unlock, title: "Unlock PDF", description: "Remove restrictions from a protected PDF.", color: "tool-merge" },
+      { to: "/redact-pdf", icon: EyeOff, title: "Redact PDF", description: "Permanently black out sensitive text or areas.", color: "tool-compress", isNew: true },
+      { to: "/fill-forms", icon: ClipboardEdit, title: "Fill PDF Forms", description: "Fill interactive AcroForm fields and download.", color: "tool-split", isNew: true },
     ],
   },
 ];
