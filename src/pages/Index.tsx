@@ -156,6 +156,8 @@ const categories: { id: string; name: string; description: string; tools: (Tool 
     tools: [
       { to: "/protect-pdf", icon: Lock, title: "Protect PDF", description: "Add a password to keep your PDF private.", color: "tool-convert" },
       { to: "/unlock-pdf", icon: Unlock, title: "Unlock PDF", description: "Remove restrictions from a protected PDF.", color: "tool-merge" },
+      { to: "/redact-pdf", icon: EyeOff, title: "Redact PDF", description: "Permanently black out sensitive text or areas.", color: "tool-compress", isNew: true },
+      { to: "/fill-forms", icon: ClipboardEdit, title: "Fill PDF Forms", description: "Fill interactive AcroForm fields and download.", color: "tool-split", isNew: true },
     ],
   },
 ];
