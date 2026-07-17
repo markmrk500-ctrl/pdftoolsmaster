@@ -57,6 +57,10 @@ import NotFound from "./pages/NotFound.tsx";
 import { AuthProvider } from "./hooks/useAuth";
 import { DensityProvider } from "./hooks/useDensity";
 import Compare from "./pages/Compare.tsx";
+import ExcelToPdf from "./pages/ExcelToPdf.tsx";
+import WordToPdf from "./pages/WordToPdf.tsx";
+import FillForms from "./pages/FillForms.tsx";
+import RedactPdf from "./pages/RedactPdf.tsx";
 
 const queryClient = new QueryClient();
 
