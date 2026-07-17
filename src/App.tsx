@@ -124,6 +124,10 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/compare" element={<Compare />} />
+            <Route path="/excel-to-pdf" element={<ExcelToPdf />} />
+            <Route path="/word-to-pdf" element={<WordToPdf />} />
+            <Route path="/fill-forms" element={<FillForms />} />
+            <Route path="/redact-pdf" element={<RedactPdf />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
