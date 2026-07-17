@@ -117,6 +117,8 @@ const categories: { id: string; name: string; description: string; tools: (Tool 
       { to: "/text-to-pdf", icon: Type, title: "Text to PDF", description: "Paste any text and convert it into a paginated PDF.", color: "tool-merge" },
       { to: "/markdown-to-pdf", icon: FileCode, title: "Markdown to PDF", description: "Render Markdown into a beautifully styled PDF.", color: "tool-split" },
       { to: "/blank-pdf", icon: FilePlus2, title: "Blank PDF", description: "Generate empty PDFs in any standard size.", color: "tool-merge" },
+      { to: "/word-to-pdf", icon: FileTextIcon2, title: "Word to PDF", description: "Convert DOCX documents into polished PDFs.", color: "tool-convert", isNew: true },
+      { to: "/excel-to-pdf", icon: FileSpreadsheet, title: "Excel to PDF", description: "Convert XLSX/XLS sheets into paginated PDFs.", color: "tool-split", isNew: true },
     ],
   },
   {
