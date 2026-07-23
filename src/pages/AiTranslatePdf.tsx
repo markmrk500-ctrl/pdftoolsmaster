@@ -103,65 +103,104 @@ const AiTranslatePdf = () => {
     return map[lang] || `${base}/NotoSans/hinted/ttf/NotoSans-Regular.ttf`;
   };
 
-  const handleDownloadPdf = async () => {
+  const RTL_LANGS = new Set(["Arabic", "Urdu"]);
+
+  const getFontFamily = (lang: string): { name: string; url: string } => {
+    return { name: `translate-${lang.replace(/\W+/g, "-")}`, url: getFontUrl(lang) };
+  };
+
+  const loadFontFace = async (name: string, url: string) => {
     try {
-      const pdf = await PDFDocument.create();
-      pdf.registerFontkit(fontkit);
+      // @ts-ignore
+      const existing = Array.from(document.fonts as any).find((f: any) => f.family === name);
+      if (existing) return;
+      const face = new FontFace(name, `url(${url})`);
+      const loaded = await face.load();
+      (document.fonts as any).add(loaded);
+    } catch (e) {
+      console.warn("Font load failed, falling back to system font:", e);
+    }
+  };
 
-      const fontUrl = getFontUrl(language);
-      const fontBytes = await fetch(fontUrl).then((r) => {
-        if (!r.ok) throw new Error("Font download failed");
-        return r.arrayBuffer();
+  const handleDownloadPdf = async () => {
+    if (!translated) return;
+    const container = document.createElement("div");
+    try {
+      const { name: fontName, url: fontUrl } = getFontFamily(language);
+      await loadFontFace(fontName, fontUrl);
+
+      const isRTL = RTL_LANGS.has(language);
+      const pageWmm = 210, pageHmm = 297, marginMm = 15;
+      // Render at ~96 DPI: 1mm ≈ 3.78px
+      const pxPerMm = 3.78;
+      const widthPx = Math.round((pageWmm - marginMm * 2) * pxPerMm);
+
+      Object.assign(container.style, {
+        position: "fixed",
+        top: "-10000px",
+        left: "0",
+        width: `${widthPx}px`,
+        padding: "0",
+        background: "#ffffff",
+        color: "#000000",
+        fontFamily: `"${fontName}", "Noto Sans", Arial, sans-serif`,
+        fontSize: "14px",
+        lineHeight: "1.7",
+        direction: isRTL ? "rtl" : "ltr",
+        textAlign: isRTL ? "right" : "left",
+        whiteSpace: "pre-wrap",
+        wordWrap: "break-word",
+      } as CSSStyleDeclaration);
+      container.lang = language;
+      container.textContent = translated;
+      document.body.appendChild(container);
+
+      // Ensure fonts finished
+      // @ts-ignore
+      if (document.fonts?.ready) await document.fonts.ready;
+
+      const canvas = await html2canvas(container, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
       });
-      const font = await pdf.embedFont(fontBytes, { subset: true });
 
-      const fontSize = 11;
-      const margin = 50;
-      const pageW = 612, pageH = 792;
-      const maxW = pageW - margin * 2;
-      const lh = fontSize * 1.5;
+      const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+      const imgWmm = pageWmm - marginMm * 2;
+      const imgHmm = (canvas.height * imgWmm) / canvas.width;
+      const pageContentHmm = pageHmm - marginMm * 2;
 
-      const wrap = (line: string): string[] => {
-        if (!line) return [""];
-        // Split by character for CJK, by word for others
-        const isCJK = /[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/.test(line);
-        const tokens = isCJK ? Array.from(line) : line.split(" ");
-        const sep = isCJK ? "" : " ";
-        const out: string[] = [];
-        let cur = "";
-        for (const w of tokens) {
-          const t = cur ? `${cur}${sep}${w}` : w;
-          if (font.widthOfTextAtSize(t, fontSize) > maxW) {
-            if (cur) out.push(cur);
-            cur = w;
-          } else cur = t;
-        }
-        if (cur) out.push(cur);
-        return out;
-      };
-
-      const lines: string[] = [];
-      translated.split("\n").forEach((line) => lines.push(...wrap(line)));
-      let page = pdf.addPage([pageW, pageH]);
-      let y = pageH - margin;
-      for (const line of lines) {
-        if (y < margin) { page = pdf.addPage([pageW, pageH]); y = pageH - margin; }
-        try {
-          page.drawText(line, { x: margin, y, size: fontSize, font, color: rgb(0, 0, 0) });
-        } catch {
-          // Skip glyphs not in font
-        }
-        y -= lh;
+      // Slice canvas into page-sized chunks
+      const sliceHeightPx = Math.floor((pageContentHmm * canvas.width) / imgWmm);
+      let renderedPx = 0;
+      let firstPage = true;
+      while (renderedPx < canvas.height) {
+        const sliceH = Math.min(sliceHeightPx, canvas.height - renderedPx);
+        const slice = document.createElement("canvas");
+        slice.width = canvas.width;
+        slice.height = sliceH;
+        const ctx = slice.getContext("2d")!;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, slice.width, slice.height);
+        ctx.drawImage(canvas, 0, renderedPx, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+        const imgData = slice.toDataURL("image/jpeg", 0.92);
+        const sliceHmm = (sliceH * imgWmm) / canvas.width;
+        if (!firstPage) pdf.addPage();
+        pdf.addImage(imgData, "JPEG", marginMm, marginMm, imgWmm, sliceHmm);
+        firstPage = false;
+        renderedPx += sliceH;
       }
-      const out = await pdf.save();
-      const blob = new Blob([out as BlobPart], { type: "application/pdf" });
-      downloadBlobSafely(blob, (file?.name.replace(/\.pdf$/i, "") || "translated") + `-${language}.pdf`);
+
+      pdf.save((file?.name.replace(/\.pdf$/i, "") || "translated") + `-${language}.pdf`);
       toast({ title: "PDF downloaded", description: `Translated PDF saved in ${language}.` });
     } catch (e) {
       console.error(e);
       toast({ title: "PDF export failed", description: "Try the .txt download instead.", variant: "destructive" });
+    } finally {
+      if (container.parentNode) container.parentNode.removeChild(container);
     }
   };
+
 
   return (
     <ToolPageShell
