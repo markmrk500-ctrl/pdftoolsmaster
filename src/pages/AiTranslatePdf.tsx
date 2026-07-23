@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { PDFDocument, rgb } from "pdf-lib";
-import fontkit from "@pdf-lib/fontkit";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
 import { FAQ } from "@/components/FAQ";
