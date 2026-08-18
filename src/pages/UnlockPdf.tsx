@@ -100,6 +100,7 @@ const UnlockPdf = () => {
     try {
       const bytes = await files[0].arrayBuffer();
       let outBytes: Uint8Array | null = null;
+      let rasterized = false;
 
       // Strategy:
       // A) If a password is provided, try @cantoo/pdf-lib (supports AES-256/RC4
