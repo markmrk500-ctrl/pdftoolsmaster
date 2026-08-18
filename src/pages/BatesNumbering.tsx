@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, rgb } from "pdf-lib";
+import { embedTextFont, safeDrawText, safeWidth } from "@/lib/pdfFonts";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FAQ } from "@/components/FAQ";
 import { FileDropzone } from "@/components/FileDropzone";
@@ -28,15 +29,15 @@ const BatesNumbering = () => {
     try {
       const bytes = await file.arrayBuffer();
       const pdf = await PDFDocument.load(bytes);
-      const font = await pdf.embedFont(StandardFonts.Courier);
+      const font = await embedTextFont(pdf, `${prefix ?? ""}${suffix ?? ""}0123456789`, { mono: true });
       const pages = pdf.getPages();
       pages.forEach((page, i) => {
         const num = String(start + i).padStart(pad, "0");
         const label = `${prefix}${num}`;
         const { width } = page.getSize();
         const size = 10;
-        const textWidth = font.widthOfTextAtSize(label, size);
-        page.drawText(label, {
+        const textWidth = safeWidth(font, label, size);
+        safeDrawText(page, label, {
           x: width - textWidth - 36,
           y: 24,
           size,

@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, rgb } from "pdf-lib";
+import { embedTextFont, safeDrawText, safeWidth } from "@/lib/pdfFonts";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FAQ } from "@/components/FAQ";
 import { Button } from "@/components/ui/button";
@@ -64,8 +65,9 @@ const CsvToPdf = () => {
       if (!rows.length) throw new Error("Empty CSV");
 
       const pdf = await PDFDocument.create();
-      const font = await pdf.embedFont(StandardFonts.Helvetica);
-      const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+      const sample = rows.flat().join(" ").slice(0, 4000);
+      const font = await embedTextFont(pdf, sample);
+      const bold = await embedTextFont(pdf, sample, { bold: true });
       const fontSize = 9;
       const padding = 4;
       const pageW = 792, pageH = 612; // Letter landscape
@@ -78,7 +80,7 @@ const CsvToPdf = () => {
         let max = 0;
         for (const r of rows) {
           const t = (r[ci] || "").slice(0, 80);
-          const w = font.widthOfTextAtSize(t, fontSize);
+          const w = safeWidth(font, t, fontSize);
           if (w > max) max = w;
         }
         return max + padding * 2;
@@ -99,7 +101,7 @@ const CsvToPdf = () => {
         for (let ci = 0; ci < cols; ci++) {
           page.drawRectangle({ x, y, width: colW[ci], height: rowH, borderColor: rgb(0.8, 0.8, 0.8), borderWidth: 0.5 });
           const text = (r[ci] || "").slice(0, 80);
-          page.drawText(text, { x: x + padding, y: y + padding, size: fontSize, font: f, color: rgb(0.1, 0.1, 0.1) });
+          safeDrawText(page, text, { x: x + padding, y: y + padding, size: fontSize, font: f, color: rgb(0.1, 0.1, 0.1) });
           x += colW[ci];
         }
         y -= rowH;
