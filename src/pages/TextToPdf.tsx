@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, rgb } from "pdf-lib";
+import { embedTextFont, safeDrawText, safeWidth } from "@/lib/pdfFonts";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FAQ } from "@/components/FAQ";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,7 @@ const TextToPdf = () => {
     setProcessing(true);
     try {
       const pdf = await PDFDocument.create();
-      const font = await pdf.embedFont(StandardFonts.Helvetica);
+      const font = await embedTextFont(pdf, text);
       const fontSize = 11;
       const margin = 50;
       const pageW = 612;
@@ -38,7 +39,7 @@ const TextToPdf = () => {
         let cur = "";
         for (const w of words) {
           const test = cur ? `${cur} ${w}` : w;
-          if (font.widthOfTextAtSize(test, fontSize) > maxW) {
+          if (safeWidth(font, test, fontSize) > maxW) {
             if (cur) out.push(cur);
             cur = w;
           } else {
@@ -57,7 +58,7 @@ const TextToPdf = () => {
           page = pdf.addPage([pageW, pageH]);
           y = pageH - margin;
         }
-        page.drawText(line, { x: margin, y, size: fontSize, font, color: rgb(0, 0, 0) });
+        safeDrawText(page, line, { x: margin, y, size: fontSize, font, color: rgb(0, 0, 0) });
         y -= lineHeight;
       }
 

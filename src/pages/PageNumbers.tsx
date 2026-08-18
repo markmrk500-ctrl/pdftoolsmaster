@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, rgb } from "pdf-lib";
+import { embedTextFont, safeDrawText, safeWidth } from "@/lib/pdfFonts";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
 import { FAQ } from "@/components/FAQ";
@@ -43,13 +44,13 @@ const PageNumbers = () => {
     try {
       const bytes = await files[0].arrayBuffer();
       const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
-      const font = await pdf.embedFont(StandardFonts.Helvetica);
+      const font = await embedTextFont(pdf, "0123456789 Page of");
       const pages = pdf.getPages();
       const total = pages.length;
       pages.forEach((page, i) => {
         const text = `${i + 1} / ${total}`;
         const size = 11;
-        const width = font.widthOfTextAtSize(text, size);
+        const width = safeWidth(font, text, size);
         const { width: pw, height: ph } = page.getSize();
         const margin = 24;
         let x = pw / 2 - width / 2;
@@ -57,7 +58,7 @@ const PageNumbers = () => {
         if (position[0] === "t") y = ph - margin - size;
         if (position[1] === "l") x = margin;
         if (position[1] === "r") x = pw - margin - width;
-        page.drawText(text, { x, y, size, font, color: rgb(0.3, 0.3, 0.3) });
+        safeDrawText(page, text, { x, y, size, font, color: rgb(0.3, 0.3, 0.3) });
       });
       setProgress(80);
       const out = await pdf.save();

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { PDFDocument } from "pdf-lib";
-import * as pdfjsLib from "pdfjs-dist";
-import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { pdfjsLib } from "@/lib/pdfjs";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FAQ } from "@/components/FAQ";
 import { FileDropzone } from "@/components/FileDropzone";
@@ -9,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 const faqs = [
   { question: "What does inverting colors do?", answer: "Every pixel's color is replaced with its complement: white becomes black, black becomes white, and all colors swap to their opposite. Useful for dark mode reading and saving printer ink." },

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, rgb } from "pdf-lib";
+import { embedTextFont, safeDrawText, safeWidth } from "@/lib/pdfFonts";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
 import { FAQ } from "@/components/FAQ";
@@ -33,17 +34,17 @@ const HeaderFooter = () => {
     try {
       const bytes = await files[0].arrayBuffer();
       const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
-      const font = await pdf.embedFont(StandardFonts.Helvetica);
+      const font = await embedTextFont(pdf, `${header}\n${footer}`);
       const size = 10;
       pdf.getPages().forEach((p) => {
         const { width, height } = p.getSize();
         if (header) {
-          const w = font.widthOfTextAtSize(header, size);
-          p.drawText(header, { x: (width - w) / 2, y: height - 30, size, font, color: rgb(0.3, 0.3, 0.3) });
+          const w = safeWidth(font, header, size);
+          safeDrawText(p, header, { x: (width - w) / 2, y: height - 30, size, font, color: rgb(0.3, 0.3, 0.3) });
         }
         if (footer) {
-          const w = font.widthOfTextAtSize(footer, size);
-          p.drawText(footer, { x: (width - w) / 2, y: 20, size, font, color: rgb(0.3, 0.3, 0.3) });
+          const w = safeWidth(font, footer, size);
+          safeDrawText(p, footer, { x: (width - w) / 2, y: 20, size, font, color: rgb(0.3, 0.3, 0.3) });
         }
       });
       setProgress(80);

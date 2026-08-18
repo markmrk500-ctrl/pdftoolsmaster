@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { PDFDocument, StandardFonts, degrees, rgb } from "pdf-lib";
+import { PDFDocument, degrees, rgb } from "pdf-lib";
+import { embedTextFont, safeDrawText, safeWidth } from "@/lib/pdfFonts";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
 import { FAQ } from "@/components/FAQ";
@@ -47,13 +48,13 @@ const WatermarkPdf = () => {
     try {
       const bytes = await files[0].arrayBuffer();
       const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
-      const font = await pdf.embedFont(StandardFonts.HelveticaBold);
+      const font = await embedTextFont(pdf, text, { bold: true });
       const pages = pdf.getPages();
       pages.forEach((page) => {
         const { width, height } = page.getSize();
         const size = Math.min(width, height) / 8;
-        const w = font.widthOfTextAtSize(text, size);
-        page.drawText(text, {
+        const w = safeWidth(font, text, size);
+        safeDrawText(page, text, {
           x: width / 2 - w / 2,
           y: height / 2,
           size,

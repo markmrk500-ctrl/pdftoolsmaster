@@ -30,6 +30,30 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Block requests to private / loopback / link-local networks (SSRF guard).
+    const host = target.hostname.toLowerCase().replace(/^\[|\]$/g, "");
+    const isBlockedHost =
+      host === "localhost" ||
+      host.endsWith(".localhost") ||
+      host.endsWith(".internal") ||
+      host.endsWith(".local") ||
+      host === "::1" ||
+      host === "0.0.0.0" ||
+      /^127\./.test(host) ||
+      /^10\./.test(host) ||
+      /^192\.168\./.test(host) ||
+      /^172\.(1[6-9]|2\d|3[01])\./.test(host) ||
+      /^169\.254\./.test(host) ||
+      /^fc[0-9a-f]{2}:/.test(host) ||
+      /^fd[0-9a-f]{2}:/.test(host) ||
+      /^fe80:/.test(host);
+    if (isBlockedHost) {
+      return new Response(JSON.stringify({ error: "This URL points to a private network and can't be fetched." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const res = await fetch(target.toString(), {
       headers: {
         "User-Agent":
@@ -37,6 +61,7 @@ Deno.serve(async (req) => {
         Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       },
       redirect: "follow",
+      signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) {
       return new Response(JSON.stringify({ error: `Upstream ${res.status}` }), {
@@ -44,7 +69,23 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    let html = await res.text();
+
+    const MAX_BYTES = 5 * 1024 * 1024;
+    const declared = Number(res.headers.get("content-length") || 0);
+    if (declared > MAX_BYTES) {
+      return new Response(JSON.stringify({ error: "That page is too large to convert (over 5MB)." }), {
+        status: 413,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const raw = new Uint8Array(await res.arrayBuffer());
+    if (raw.byteLength > MAX_BYTES) {
+      return new Response(JSON.stringify({ error: "That page is too large to convert (over 5MB)." }), {
+        status: 413,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    let html = new TextDecoder("utf-8").decode(raw);
     const base = `${target.protocol}//${target.host}${target.pathname.replace(/[^/]*$/, "")}`;
     // Inject <base> so relative assets resolve
     if (/<head[^>]*>/i.test(html)) {

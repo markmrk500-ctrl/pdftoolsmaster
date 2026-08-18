@@ -1,6 +1,5 @@
 import { useState } from "react";
-import * as pdfjsLib from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { pdfjsLib } from "@/lib/pdfjs";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
 import { FAQ } from "@/components/FAQ";
@@ -10,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Copy, Download, Loader2, FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const faqs = [
   {

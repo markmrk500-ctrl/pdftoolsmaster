@@ -78,7 +78,7 @@ const ProtectPdf = () => {
       toast({
         title: "Protection unavailable in-browser",
         description:
-          "Browser PDF encryption has limitations. For strong AES-256 encryption use a desktop tool like Adobe Acrobat.",
+          "Couldn't apply the password to this file. It may already be encrypted or damaged — try unlocking it first, or use a different PDF.",
         variant: "destructive",
       });
     } finally {

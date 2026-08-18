@@ -100,6 +100,7 @@ const UnlockPdf = () => {
     try {
       const bytes = await files[0].arrayBuffer();
       let outBytes: Uint8Array | null = null;
+      let rasterized = false;
 
       // Strategy:
       // A) If a password is provided, try @cantoo/pdf-lib (supports AES-256/RC4
@@ -132,6 +133,7 @@ const UnlockPdf = () => {
             setProgress(35);
             try {
               outBytes = await decryptViaRender(bytes, password);
+              rasterized = true;
             } catch (e2: any) {
               if (isPasswordError(e2)) throw new Error("WRONG_PASSWORD");
               throw e2;
@@ -140,6 +142,7 @@ const UnlockPdf = () => {
             // Non-password error — try render as last resort.
             setProgress(35);
             outBytes = await decryptViaRender(bytes, password);
+            rasterized = true;
           }
         }
       } else {
@@ -161,7 +164,15 @@ const UnlockPdf = () => {
       setProgress(95);
       downloadBlob(outBytes, files[0].name.replace(/\.pdf$/i, "") + "-unlocked.pdf");
       setProgress(100);
-      toast({ title: "PDF unlocked", description: "Password and restrictions removed." });
+      toast(
+        rasterized
+          ? {
+              title: "PDF unlocked (image-only)",
+              description:
+                "This file's encryption couldn't be removed in place, so each page was re-rendered as an image. The text won't be selectable or searchable.",
+            }
+          : { title: "PDF unlocked", description: "Password and restrictions removed." }
+      );
     } catch (e: any) {
       console.error(e);
       const msg = e?.message || "";
