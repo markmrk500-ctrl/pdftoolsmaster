@@ -109,16 +109,18 @@ const AiTranslatePdf = () => {
     return { name: `translate-${lang.replace(/\W+/g, "-")}`, url: getFontUrl(lang) };
   };
 
-  const loadFontFace = async (name: string, url: string) => {
+  const loadFontFace = async (name: string, url: string): Promise<boolean> => {
     try {
       // @ts-ignore
       const existing = Array.from(document.fonts as any).find((f: any) => f.family === name);
-      if (existing) return;
+      if (existing) return true;
       const face = new FontFace(name, `url(${url})`);
       const loaded = await face.load();
       (document.fonts as any).add(loaded);
+      return true;
     } catch (e) {
       console.warn("Font load failed, falling back to system font:", e);
+      return false;
     }
   };
 
@@ -127,7 +129,14 @@ const AiTranslatePdf = () => {
     const container = document.createElement("div");
     try {
       const { name: fontName, url: fontUrl } = getFontFamily(language);
-      await loadFontFace(fontName, fontUrl);
+      const fontOk = await loadFontFace(fontName, fontUrl);
+      if (!fontOk) {
+        toast({
+          title: "Font couldn't be loaded",
+          description: `The ${language} font failed to download. The PDF may show boxes instead of letters — check your connection or use the .txt download.`,
+          variant: "destructive",
+        });
+      }
 
       const isRTL = RTL_LANGS.has(language);
       const pageWmm = 210, pageHmm = 297, marginMm = 15;
