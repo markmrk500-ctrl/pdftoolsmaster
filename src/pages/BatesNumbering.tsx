@@ -29,7 +29,7 @@ const BatesNumbering = () => {
     try {
       const bytes = await file.arrayBuffer();
       const pdf = await PDFDocument.load(bytes);
-      const font = await embedTextFont(pdf, `${prefix ?? ""}${suffix ?? ""}0123456789`, { mono: true });
+      const font = await embedTextFont(pdf, `${prefix}0123456789`, { mono: true });
       const pages = pdf.getPages();
       pages.forEach((page, i) => {
         const num = String(start + i).padStart(pad, "0");

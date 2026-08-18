@@ -44,7 +44,7 @@ const PageNumbers = () => {
     try {
       const bytes = await files[0].arrayBuffer();
       const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
-      const font = await embedTextFont(pdf, `${prefix ?? ""}${suffix ?? ""}0123456789`);
+      const font = await embedTextFont(pdf, "0123456789 Page of");
       const pages = pdf.getPages();
       const total = pages.length;
       pages.forEach((page, i) => {
