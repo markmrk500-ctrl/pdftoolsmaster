@@ -1,4 +1,4 @@
-import * as pdfjsLib from "pdfjs-dist";
+import { pdfjsLib } from "./pdfjs";
 import { PDFDocument } from "pdf-lib";
 
 export class PdfPasswordError extends Error {
