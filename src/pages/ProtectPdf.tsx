@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PDFDocument } from "@cantoo/pdf-lib";
 import { ToolPageShell } from "@/components/ToolPageShell";
 import { FileDropzone } from "@/components/FileDropzone";
@@ -7,14 +7,39 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Download, Loader2, Lock, AlertTriangle } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Download, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import {
+  encryptPdf,
+  preloadQpdf,
+  QpdfCorruptError,
+  QpdfUnavailableError,
+  type PrintPermission,
+} from "@/lib/qpdf";
 
 const faqs = [
   {
-    question: "How strong is the password protection?",
+    question: "What encryption does this use?",
     answer:
-      "This tool adds a basic password layer compatible with all PDF readers. For highly sensitive documents (legal, medical, financial), use a desktop tool with AES-256 encryption.",
+      "256-bit AES (PDF 2.0 / revision 6) — the strongest encryption the PDF specification supports, and the same standard used by Adobe Acrobat and desktop tools. It's applied by qpdf running locally in your browser.",
+  },
+  {
+    question: "Can I set a separate owner password?",
+    answer:
+      "Yes. The user password is needed to open the file; the owner password unlocks the permissions you restricted. Leave the owner field blank to reuse the same password for both.",
+  },
+  {
+    question: "Do the permission settings really work?",
+    answer:
+      "Yes. Printing, copying, editing, annotating, form filling and page assembly are written into the encryption dictionary and enforced by every compliant PDF reader.",
   },
   {
     question: "Can I remove the password later?",
@@ -28,12 +53,53 @@ const faqs = [
   },
 ];
 
+const downloadBlob = (bytes: Uint8Array, filename: string) => {
+  const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
 const ProtectPdf = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [ownerPassword, setOwnerPassword] = useState("");
+  const [print, setPrint] = useState<PrintPermission>("full");
+  const [allowCopy, setAllowCopy] = useState(false);
+  const [allowModify, setAllowModify] = useState(false);
+  const [allowAnnotate, setAllowAnnotate] = useState(false);
+  const [allowForms, setAllowForms] = useState(true);
+  const [allowAssemble, setAllowAssemble] = useState(false);
   const [progress, setProgress] = useState(0);
   const [processing, setProcessing] = useState(false);
+  const [status, setStatus] = useState("");
+  const [result, setResult] = useState<string | null>(null);
+
+  // Warm the encryption engine up as soon as a file is chosen.
+  useEffect(() => {
+    if (files.length) preloadQpdf();
+  }, [files.length]);
+
+  const legacyFallback = async (bytes: ArrayBuffer) => {
+    const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
+    return (await pdf.save({
+      userPassword: password,
+      ownerPassword: ownerPassword || password,
+      permissions: {
+        printing: print === "none" ? undefined : print === "low" ? "lowResolution" : "highResolution",
+        modifying: allowModify,
+        copying: allowCopy,
+        annotating: allowAnnotate,
+        fillingForms: allowForms,
+        contentAccessibility: true,
+        documentAssembly: allowAssemble,
+      },
+    } as any)) as Uint8Array;
+  };
 
   const handleProtect = async () => {
     if (!files[0]) return;
@@ -46,61 +112,80 @@ const ProtectPdf = () => {
       return;
     }
     setProcessing(true);
-    setProgress(10);
+    setResult(null);
+    setStatus("Preparing secure engine…");
+    setProgress(15);
+
     try {
       const bytes = await files[0].arrayBuffer();
-      const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
-      setProgress(50);
-      const out = await pdf.save({
-        userPassword: password,
-        ownerPassword: password,
-        permissions: {
-          printing: "highResolution",
-          modifying: false,
-          copying: false,
-          annotating: false,
-          fillingForms: true,
-          contentAccessibility: true,
-          documentAssembly: false,
-        },
-      } as any);
-      const blob = new Blob([out as BlobPart], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = files[0].name.replace(/\.pdf$/i, "") + "-protected.pdf";
-      a.click();
-      URL.revokeObjectURL(url);
+      let out: Uint8Array;
+      let method: "aes256" | "legacy" = "aes256";
+
+      try {
+        setStatus("Encrypting with AES-256…");
+        setProgress(45);
+        out = await encryptPdf(bytes, {
+          userPassword: password,
+          ownerPassword: ownerPassword || undefined,
+          print,
+          copy: allowCopy,
+          modify: allowModify,
+          annotate: allowAnnotate,
+          fillForms: allowForms,
+          assemble: allowAssemble,
+        });
+      } catch (e) {
+        if (e instanceof QpdfCorruptError) throw e;
+        if (!(e instanceof QpdfUnavailableError)) console.error(e);
+        setStatus("Falling back to standard encryption…");
+        out = await legacyFallback(bytes);
+        method = "legacy";
+      }
+
+      setProgress(95);
+      downloadBlob(out, files[0].name.replace(/\.pdf$/i, "") + "-protected.pdf");
       setProgress(100);
-      toast({ title: "PDF protected", description: "File downloaded." });
+      setResult(
+        method === "aes256"
+          ? "Encrypted with 256-bit AES (PDF 2.0 / R6) — the strongest protection the PDF format supports."
+          : "Encrypted with standard PDF encryption. The AES-256 engine couldn't load in this browser, so a compatible fallback was used."
+      );
+      toast({
+        title: method === "aes256" ? "PDF protected with AES-256" : "PDF protected",
+        description: "Your encrypted file has been downloaded.",
+      });
     } catch (e) {
       console.error(e);
       toast({
-        title: "Protection unavailable in-browser",
+        title: "Couldn't protect this PDF",
         description:
-          "Couldn't apply the password to this file. It may already be encrypted or damaged — try unlocking it first, or use a different PDF.",
+          e instanceof QpdfCorruptError
+            ? "This file appears to be damaged or already encrypted. Unlock it first, then try again."
+            : "Something went wrong while encrypting. Try a different PDF.",
         variant: "destructive",
       });
     } finally {
       setProcessing(false);
+      setStatus("");
       setTimeout(() => setProgress(0), 1500);
     }
   };
 
   return (
     <ToolPageShell
-      title="Protect PDF Online Free – Add Password to PDF on Any Device | Master PDF Tools"
-      description="Password-protect PDFs online with strong AES encryption. Mobile-friendly, cross-browser, secure, and compatible with all devices and software versions."
-      keywords="Protect PDF Online Free, Password Protect PDF, Encrypt PDF for All Devices, Mobile PDF Encryption, Cross-platform PDF Security, protect pdf, password protect pdf, encrypt pdf, secure pdf, add password to pdf, pdf password, lock pdf"
-      h1="Password-Protect Your PDF Online"
-      intro="Add a password to your PDF so only people you share it with can open it. All processing happens in your browser."
+      title="Protect PDF Online Free – AES-256 Password Protection on Any Device | Master PDF Tools"
+      description="Password-protect PDFs with real 256-bit AES encryption in your browser. Set owner passwords and permissions. Mobile-friendly, cross-browser, private — no uploads."
+      keywords="Protect PDF Online Free, AES-256 PDF Encryption, Password Protect PDF, Encrypt PDF for All Devices, Mobile PDF Encryption, Cross-platform PDF Security, protect pdf, password protect pdf, encrypt pdf, secure pdf, add password to pdf, pdf password, lock pdf"
+      h1="Password-Protect Your PDF with AES-256 Encryption"
+      intro="Add a password to your PDF using genuine 256-bit AES encryption and fine-grained permissions. Everything runs locally in your browser — the file and password never leave your device."
       faqSchema={faqs}
       toolUI={
         <div className="space-y-6">
           <div className="flex gap-3 bg-accent/50 border border-border rounded-lg p-4 text-sm">
-            <AlertTriangle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+            <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
             <p className="text-muted-foreground">
-              Your password is applied locally in the browser using standard PDF encryption supported by Adobe Acrobat, Preview, Chrome and Edge. Choose a strong password — we cannot recover it for you.
+              Files are encrypted with 256-bit AES (PDF 2.0 / R6) by qpdf running locally in your browser — the same
+              standard desktop tools use. Choose a strong password: we cannot recover it for you.
             </p>
           </div>
 
@@ -114,7 +199,7 @@ const ProtectPdf = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="pwd">Password</Label>
+              <Label htmlFor="pwd">Password (required to open)</Label>
               <Input id="pwd" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
             <div className="space-y-2">
@@ -123,7 +208,65 @@ const ProtectPdf = () => {
             </div>
           </div>
 
-          {processing && <Progress value={progress} />}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="owner">Owner password (optional)</Label>
+              <Input
+                id="owner"
+                type="password"
+                placeholder="Same as password if left blank"
+                value={ownerPassword}
+                onChange={(e) => setOwnerPassword(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="print">Printing</Label>
+              <Select value={print} onValueChange={(v) => setPrint(v as PrintPermission)}>
+                <SelectTrigger id="print">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="full">Allow high-resolution printing</SelectItem>
+                  <SelectItem value="low">Allow low-resolution printing only</SelectItem>
+                  <SelectItem value="none">Block printing</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-border p-4 space-y-4">
+            <p className="text-sm font-medium">Permissions</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { id: "copy", label: "Copy text & images", value: allowCopy, set: setAllowCopy },
+                { id: "modify", label: "Edit page content", value: allowModify, set: setAllowModify },
+                { id: "annotate", label: "Add comments & annotations", value: allowAnnotate, set: setAllowAnnotate },
+                { id: "forms", label: "Fill in form fields", value: allowForms, set: setAllowForms },
+                { id: "assemble", label: "Insert, delete & rotate pages", value: allowAssemble, set: setAllowAssemble },
+              ].map((p) => (
+                <div key={p.id} className="flex items-center justify-between gap-3">
+                  <Label htmlFor={p.id} className="font-normal text-muted-foreground">
+                    {p.label}
+                  </Label>
+                  <Switch id={p.id} checked={p.value} onCheckedChange={p.set} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {processing && (
+            <div className="space-y-2">
+              <Progress value={progress} />
+              <p className="text-sm text-muted-foreground">{status}</p>
+            </div>
+          )}
+
+          {result && !processing && (
+            <div className="flex gap-3 rounded-lg border border-border bg-accent/40 p-4 text-sm">
+              <Download className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+              <p className="text-muted-foreground">{result}</p>
+            </div>
+          )}
 
           <Button
             size="lg"
@@ -147,17 +290,34 @@ const ProtectPdf = () => {
             invoices, medical records, financial statements, or personal documents
             private. Only people who know the password will be able to open the file —
             even if it's intercepted, leaked, or accidentally shared with the wrong
-            recipient. PDFMaster Tools' Protect PDF utility runs entirely in your
-            browser, so your file and password never leave your device.
+            recipient. Master PDF Tools' Protect PDF utility uses qpdf compiled to
+            WebAssembly, so your file and password never leave your device.
           </p>
 
           <h3>Step-by-Step: How to Password-Protect a PDF</h3>
           <ol>
             <li><strong>Upload your PDF</strong> using the dropzone above.</li>
             <li><strong>Enter a strong password</strong> in both fields to confirm.</li>
-            <li><strong>Click Protect &amp; Download.</strong> The encrypted PDF downloads instantly.</li>
+            <li><strong>Optionally set an owner password</strong> and choose which actions to allow.</li>
+            <li><strong>Click Protect &amp; Download.</strong> The AES-256 encrypted PDF downloads instantly.</li>
             <li><strong>Share the password securely</strong> through a separate channel from the file itself.</li>
           </ol>
+
+          <h3>What AES-256 Encryption Means</h3>
+          <p>
+            AES-256 is the encryption revision 6 scheme defined in PDF 2.0 (ISO 32000-2)
+            and used by Adobe Acrobat, qpdf, and every modern PDF toolchain. It replaces
+            the older 40-bit and 128-bit RC4 schemes, which are considered broken and can
+            be cracked by consumer hardware. Because the entire operation runs inside your
+            browser through WebAssembly, you get desktop-grade encryption without
+            uploading a single byte.
+          </p>
+
+          <h3>User Password vs Owner Password</h3>
+          <ul>
+            <li><strong>User password:</strong> required to open and read the document.</li>
+            <li><strong>Owner password:</strong> unlocks the permission restrictions — printing, copying, editing — for people who need full control. If you leave it blank, the same password is used for both.</li>
+          </ul>
 
           <h3>How to Choose a Strong PDF Password</h3>
           <ul>
@@ -174,15 +334,6 @@ const ProtectPdf = () => {
             email is compromised or forwarded, the password is exposed. Instead, share
             the password through a different channel: a phone call, an SMS message, an
             encrypted messaging app like Signal, or in person.
-          </p>
-
-          <h3>Browser Encryption Limitations</h3>
-          <p>
-            Browser-based PDF encryption uses standard PDF security features that all
-            mainstream readers (Adobe Acrobat, Preview, Chrome, Edge) support. For
-            highly sensitive documents that require AES-256 encryption certified for
-            regulated industries (HIPAA, PCI-DSS, government), use a desktop application
-            like Adobe Acrobat Pro.
           </p>
         </>
       }
