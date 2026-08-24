@@ -16,10 +16,6 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // qpdf's Emscripten glue references these Node built-ins behind
-      // environment checks; stub them out for the browser build.
-      fs: path.resolve(__dirname, "./src/lib/emptyModule.ts"),
-      path: path.resolve(__dirname, "./src/lib/emptyModule.ts"),
     },
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
   },
