@@ -19,4 +19,11 @@ export default defineConfig(({ mode }) => ({
     },
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
   },
+  optimizeDeps: {
+    // CommonJS module — let esbuild convert it so the worker can import it.
+    include: ["@neslinesli93/qpdf-wasm"],
+  },
+  worker: {
+    format: "es",
+  },
 }));
