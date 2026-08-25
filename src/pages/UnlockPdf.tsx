@@ -103,11 +103,23 @@ const UnlockPdf = () => {
       let rasterized = false;
 
       // Strategy:
+      // 0) qpdf WASM --decrypt (true AES-256 removal, keeps text searchable).
       // A) If a password is provided, try @cantoo/pdf-lib (supports AES-256/RC4
       //    user-password decryption). If it fails, fall back to pdf.js render.
       // B) If no password, strip owner restrictions with pdf-lib re-save. If
       //    that reveals a user-password requirement, prompt for it.
-      if (password) {
+      try {
+        outBytes = await decryptPdf(bytes, password);
+        setProgress(80);
+      } catch (e: any) {
+        if (e instanceof QpdfPasswordError) {
+          if (!password) throw new Error("PASSWORD_REQUIRED");
+        }
+        // engine unavailable / corrupt / wrong password → legacy strategies below
+      }
+
+      if (!outBytes && password) {
+
         try {
           const pdf = await CantooPDFDocument.load(bytes, {
             password,
