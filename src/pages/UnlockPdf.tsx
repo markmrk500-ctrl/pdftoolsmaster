@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Loader2, Unlock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { pdfjsLib } from "@/lib/pdfjs";
+import { decryptPdf, QpdfPasswordError } from "@/lib/qpdf";
 
 const faqs = [
   {
