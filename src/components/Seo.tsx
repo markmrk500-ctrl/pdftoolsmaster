@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 
-export const SITE_URL = "https://masterpdftools.lovable.app";
+export const SITE_URL = "https://masterpdftools.com";
 export const SITE_NAME = "PDFMaster Tools";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 

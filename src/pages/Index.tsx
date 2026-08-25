@@ -205,7 +205,7 @@ const faqs = [
   },
 ];
 
-const SITE_URL = "https://masterpdftools.lovable.app";
+const SITE_URL = "https://masterpdftools.com";
 
 const itemListJsonLd = {
   "@context": "https://schema.org",
