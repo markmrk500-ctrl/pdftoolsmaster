@@ -158,7 +158,7 @@ const UnlockPdf = () => {
             rasterized = true;
           }
         }
-      } else {
+      } else if (!outBytes) {
         // No password: attempt owner-restriction strip.
         try {
           const pdf = await PDFDocument.load(bytes, {
