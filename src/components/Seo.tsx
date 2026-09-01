@@ -33,7 +33,9 @@ const ensureAbsolute = (url: string | undefined): string | undefined => {
 
 const currentPath = (): string => {
   if (typeof window === "undefined") return "/";
-  return window.location.pathname || "/";
+  const raw = window.location.pathname || "/";
+  // Normalize: no trailing slash (except root), no query/hash — one canonical per page
+  return raw !== "/" ? raw.replace(/\/+$/, "") : "/";
 };
 
 export const Seo = ({
