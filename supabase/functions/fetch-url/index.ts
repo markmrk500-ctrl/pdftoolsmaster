@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
     const res = await fetch(target.toString(), {
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (compatible; MasterPdfTools/1.0; +https://pdftoolsmaster.lovable.app)",
+          "Mozilla/5.0 (compatible; MasterPdfTools/1.0; +https://www.masterpdftools.com)",
         Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       },
       redirect: "follow",
