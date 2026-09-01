@@ -2,6 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Retire the old lovable.app address: noindex + 301-style client redirect
+      (function () {
+        try {
+          var h = location.hostname;
+          if (h === 'masterpdftools.lovable.app') {
+            var m = document.createElement('meta');
+            m.name = 'robots';
+            m.content = 'noindex,nofollow';
+            document.head.appendChild(m);
+            location.replace('https://www.masterpdftools.com' + location.pathname + location.search + location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="format-detection" content="telephone=no" />
