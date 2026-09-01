@@ -66,6 +66,7 @@ const Auth = () => {
         title="Sign In or Sign Up — Save Your Favorite PDF Tools | Master PDF Tools"
         description="Create a free account to save your favorite PDF tools and access them quickly on any device."
         keywords="sign up pdf tools, login pdf tools, save favorite pdf tools"
+        noindex
       />
       <div className="container mx-auto px-4 py-12 md:py-16 max-w-md">
         <div className="text-center mb-6">
