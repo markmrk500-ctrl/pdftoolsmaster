@@ -2,7 +2,6 @@ import { Helmet } from "react-helmet-async";
 
 export const SITE_URL = "https://www.masterpdftools.com";
 export const SITE_NAME = "PDFMaster Tools";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 export interface SeoProps {
   title: string;
@@ -52,7 +51,7 @@ export const Seo = ({
 }: SeoProps) => {
   const path = currentPath();
   const url = canonical || `${SITE_URL}${path}`;
-  const ogImage = ensureAbsolute(image) || DEFAULT_OG_IMAGE;
+  const ogImage = ensureAbsolute(image);
 
   const websiteJsonLd = {
     "@context": "https://schema.org",
@@ -71,7 +70,7 @@ export const Seo = ({
     "@type": "Organization",
     name: SITE_NAME,
     url: SITE_URL,
-    logo: `${SITE_URL}/favicon.png`,
+    logo: `${SITE_URL}/logo.png`,
   };
 
   const breadcrumbJsonLd = breadcrumbs && breadcrumbs.length > 0 && {
@@ -135,14 +134,14 @@ export const Seo = ({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
-      <meta property="og:image" content={ogImage} />
+      {ogImage && <meta property="og:image" content={ogImage} />}
       <meta property="og:locale" content="en_US" />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={ogImage} />
+      {ogImage && <meta name="twitter:image" content={ogImage} />}
 
       {/* JSON-LD */}
       <script type="application/ld+json">{JSON.stringify(websiteJsonLd)}</script>
