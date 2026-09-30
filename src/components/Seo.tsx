@@ -71,7 +71,7 @@ export const Seo = ({
     "@type": "Organization",
     name: SITE_NAME,
     url: SITE_URL,
-    logo: `${SITE_URL}/favicon.ico`,
+    logo: `${SITE_URL}/favicon.png`,
   };
 
   const breadcrumbJsonLd = breadcrumbs && breadcrumbs.length > 0 && {
